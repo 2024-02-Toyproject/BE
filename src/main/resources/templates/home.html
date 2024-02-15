@@ -1,15 +1,13 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<div class="container">
-    <div>
-        <h1>금융 상품 추천 서비스</h1>
-        <p>금융 상품 목록</p>
-        <p>
-            <a href="/fixedDeposit">정기예금</a>
-            <a href="/creditLoan">신용대출</a>
-        </p>
-    </div>
-</div> <!-- /container -->
+<div>
+    <h1>금융 상품 추천 서비스</h1>
+    <p><span th:text="${session.loginName}"></span> 님, 반갑습니다.</p>
+    <p>
+        <a href="/fixedDeposit">정기예금</a>
+        <a href="/creditLoan">신용대출</a>
+    </p>
+</div>
 </body>
 </html>
