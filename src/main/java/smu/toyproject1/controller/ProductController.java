@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import smu.toyproject1.entity.CreditLoanProduct;
 import smu.toyproject1.entity.FixedDepositProduct;
+import smu.toyproject1.entity.TaxSavingProduct;
 import smu.toyproject1.repository.JdbcDBConnection;
 
 import java.util.List;
@@ -35,6 +36,14 @@ public class ProductController {
         List<FixedDepositProduct> fixedDeposits = jdbcDBConnection.retrieveFDDataFromTable("정기예금");
         model.addAttribute("fixedDeposits", fixedDeposits);
         return "products/fixedDepositProductsList";
+    }
+
+    // 절세금융 상품 목록 조회
+    @GetMapping("/taxSaving")
+    public String getTaxSavingProducts(Model model) {
+        List<TaxSavingProduct> taxSavings = jdbcDBConnection.retrieveTSDataFromTable("절세금융상품");
+        model.addAttribute("taxSavings", taxSavings);
+        return "products/taxSavingProductsList";
     }
 }
 
