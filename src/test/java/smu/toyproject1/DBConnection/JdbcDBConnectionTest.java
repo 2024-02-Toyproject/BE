@@ -10,7 +10,7 @@ public class JdbcDBConnectionTest {
     public void testRetrieveDataFromTable() {
         try {
             // 데이터 베이스와 연결에 성공하면 "데이터베이스 연결 성공!" 메시지를 띄움.
-            JdbcDBConnection.retrieveDataFromTable("신용대출");
+            JdbcDBConnection.retrieveCLDataFromTable("신용대출");
         } catch (Exception e) {
             fail("Exception should not have been thrown.");
         }

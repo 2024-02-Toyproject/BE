@@ -1,36 +1,41 @@
 package smu.toyproject1.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import smu.toyproject1.entity.CreditLoanProduct;
+import smu.toyproject1.entity.FixedDepositProduct;
 import smu.toyproject1.repository.JdbcDBConnection;
-//import smu.toyproject1.service.MemberService;
 
 import java.util.List;
 
 @Controller
 public class ProductController {
 
+    /*
+    jdbcDBConnection 객체를 올바르게 초기화하기 위해
+    1. @Autowired 어노테이션을 사용하여 의존성 주입을 수행
+    2. 생성자를 통해 jdbcDBConnection 객체를 주입받도록 수정
+     */
+    @Autowired // 의존성 주입
     private JdbcDBConnection jdbcDBConnection;
 
-    /*
-    @GetMapping은 HTTP GET 요청이 해당 URL ("/creditLoan")로 들어왔을 때, 이를 처리하는 메소드
-    보통 데이터를 등록할 때는 post, 조회할 때는 get
-     */
-
-    // 신용대출 상품 목록
+    // 신용대출 상품 목록 조회
     @GetMapping("/creditLoan")
-    public String list(Model model) {
-        List<CreditLoanProduct> creditLoans = jdbcDBConnection.retrieveDataFromTable("신용대출");
-        model.addAttribute("members", creditLoans);
+    public String getCreditLoanProducts(Model model) {
+        List<CreditLoanProduct> creditLoans = jdbcDBConnection.retrieveCLDataFromTable("신용대출");
+        model.addAttribute("creditLoans", creditLoans);
         return "products/creditLoanProductsList";
     }
 
-    // 정기예금 상품 목록
-//    @GetMapping("/fixedDeposit")
-//    public String list(Model model) {
-//
-//    }
-
+    // 정기예금 상품 목록 조회
+    @GetMapping("/fixedDeposit")
+    public String getFixedDepositProducts(Model model) {
+        List<FixedDepositProduct> fixedDeposits = jdbcDBConnection.retrieveFDDataFromTable("정기예금");
+        model.addAttribute("fixedDeposits", fixedDeposits);
+        return "products/fixedDepositProductsList";
+    }
 }
+
+

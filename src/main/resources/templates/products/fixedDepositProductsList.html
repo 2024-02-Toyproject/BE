@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>테이블 데이터</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <th>금융회사명</th>
+        <th>금융상품명</th>
+        <th>가입 방법</th>
+        <th>만기후 이자율</th>
+        <th>우대조건</th>
+        <th>가입제한</th>
+        <th>가입대상</th>
+        <th>최고한도</th>
+        <th>저축금리유형명</th>
+        <th>저축금리</th>
+        <th>최고우대금리</th>
+    </tr>
+    <tr th:each="fixedDeposit : ${fixedDeposits}">
+        <td th:text="${fixedDeposit.bankName}"></td>
+        <td th:text="${fixedDeposit.productName}"></td>
+        <td th:text="${fixedDeposit.joinMethod}"></td>
+        <td th:text="${fixedDeposit.maturityInterestRate}"></td>
+        <td th:text="${fixedDeposit.preferentialConditions}"></td>
+        <td th:text="${fixedDeposit.joinRestrictions}"></td>
+        <td th:text="${fixedDeposit.targetCustomers}"></td>
+        <td th:text="${fixedDeposit.maximumLimit}"></td>
+        <td th:text="${fixedDeposit.interestRateType}"></td>
+        <td th:text="${fixedDeposit.interestRate}"></td>
+        <td th:text="${fixedDeposit.maximumPreferentialRate}"></td>
+    </tr>
+</table>
+</body>
+</html>
+

@@ -25,14 +25,14 @@
         <th>금리구분</th>
         <th>평균 금리</th>
     </tr>
-    <tr th:each="member : ${members}">
-        <td th:text="${member.company}"></td>
-        <td th:text="${member.productName}"></td>
-        <td th:text="${member.method}"></td>
-        <td th:text="${member.loanType}"></td>
-        <td th:text="${member.cbCompany}"></td>
-        <td th:text="${member.rateType}"></td>
-        <td th:text="${member.averageRate}"></td>
+    <tr th:each="creditLoan : ${creditLoans}">
+        <td th:text="${creditLoan.company}"></td>
+        <td th:text="${creditLoan.productName}"></td>
+        <td th:text="${creditLoan.method}"></td>
+        <td th:text="${creditLoan.loanType}"></td>
+        <td th:text="${creditLoan.cbCompany}"></td>
+        <td th:text="${creditLoan.rateType}"></td>
+        <td th:text="${creditLoan.averageRate}"></td>
     </tr>
 </table>
 </body>

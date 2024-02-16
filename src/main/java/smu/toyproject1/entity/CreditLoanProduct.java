@@ -1,5 +1,10 @@
 package smu.toyproject1.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class CreditLoanProduct {
 
     private String company;
@@ -20,60 +25,8 @@ public class CreditLoanProduct {
         this.averageRate = averageRate;
     }
 
-    // 각 변수에 대한 Getter & Setter
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public String getLoanType() {
-        return loanType;
-    }
-
-    public void setLoanType(String loanType) {
-        this.loanType = loanType;
-    }
-
-    public String getCbCompany() {
-        return cbCompany;
-    }
-
-    public void setCbCompany(String cbCompany) {
-        this.cbCompany = cbCompany;
-    }
-
-    public String getRateType() {
-        return rateType;
-    }
-
-    public void setRateType(String rateType) {
-        this.rateType = rateType;
-    }
-
-    public int getAverageRate() {
-        return averageRate;
-    }
-
-    public void setAverageRate(int averageRate) {
-        this.averageRate = averageRate;
-    }
+    /*
+    각 변수에 대한 Getter & Setter 생성
+    : lombok 사용 -> annotation(@Getter @Setter)으로 처리
+    */
 }
