@@ -3,6 +3,7 @@ package smu.toyproject1.repository;
 import org.springframework.stereotype.Component;
 import smu.toyproject1.entity.CreditLoanProduct;
 import smu.toyproject1.entity.FixedDepositProduct;
+import smu.toyproject1.entity.InstallmentSavingProduct;
 import smu.toyproject1.entity.TaxSavingProduct;
 
 import java.sql.*;
@@ -153,6 +154,59 @@ public class JdbcDBConnection {
             closeConnection(connection);
         }
         return fixedDeposits;
+    }
+
+    // 테이블에서 적금 상품의 데이터를 조회
+    public static List<InstallmentSavingProduct> retrieveISDataFromTable(String tableName) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<InstallmentSavingProduct> installmentSavings = new ArrayList<>();
+
+        try {
+            connection = getConnection();
+            if (connection != null) {
+                String sql = "SELECT * FROM " + tableName;
+                preparedStatement = connection.prepareStatement(sql);
+                resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    String company = resultSet.getString("금융회사");
+                    String productName = resultSet.getString("상품명");
+                    String accrualMethod = resultSet.getString("적립방식");
+                    String preTaxInterestRate = resultSet.getString("세전이자율");
+                    String postTaxInterestRate = resultSet.getString("세후이자율");
+                    String postTaxInterest = resultSet.getString("세후이자");
+                    String maximumPreferentialInterestRate = resultSet.getString("최고우대금리");
+                    String membershipRestrictionStatus = resultSet.getString("가입제한여부");
+                    String interestCalculationMethod = resultSet.getString("이자계산방식");
+
+                    InstallmentSavingProduct installmentSaving = new InstallmentSavingProduct(company, productName, accrualMethod, preTaxInterestRate
+                            , postTaxInterestRate, postTaxInterest, maximumPreferentialInterestRate, membershipRestrictionStatus, interestCalculationMethod);
+                    installmentSavings.add(installmentSaving);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("데이터 조회 오류입니다.");
+            e.printStackTrace();
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            closeConnection(connection);
+        }
+        return installmentSavings;
     }
 
     // 테이블에서 절세금융상품의 데이터를 조회

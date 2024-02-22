@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import smu.toyproject1.entity.CreditLoanProduct;
 import smu.toyproject1.entity.FixedDepositProduct;
+import smu.toyproject1.entity.InstallmentSavingProduct;
 import smu.toyproject1.entity.TaxSavingProduct;
 import smu.toyproject1.repository.JdbcDBConnection;
 
@@ -36,6 +37,14 @@ public class ProductController {
         List<FixedDepositProduct> fixedDeposits = jdbcDBConnection.retrieveFDDataFromTable("정기예금");
         model.addAttribute("fixedDeposits", fixedDeposits);
         return "products/fixedDepositProductsList";
+    }
+
+    // 적금 상품 목록 조회
+    @GetMapping("/installmentSaving")
+    public String getInstallmentSavingProducts(Model model) {
+        List<InstallmentSavingProduct> installmentSavings = jdbcDBConnection.retrieveISDataFromTable("적금");
+        model.addAttribute("installmentSavings", installmentSavings);
+        return "products/installmentSavingProductsList";
     }
 
     // 절세금융 상품 목록 조회

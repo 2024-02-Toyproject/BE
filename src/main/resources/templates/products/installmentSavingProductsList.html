@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>테이블 데이터</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <th>금융회사</th>
+        <th>상품명</th>
+        <th>적립방식</th>
+        <th>세전이자율</th>
+        <th>세후이자율</th>
+        <th>세후이자</th>
+        <th>최고우대금리</th>
+        <th>가입제한여부</th>
+        <th>이자계산방식</th>
+    </tr>
+    <tr th:each="installmentSaving : ${installmentSavings}">
+        <td th:text="${installmentSaving.company}"></td>
+        <td th:text="${installmentSaving.productName}"></td>
+        <td th:text="${installmentSaving.accrualMethod}"></td>
+        <td th:text="${installmentSaving.preTaxInterestRate}"></td>
+        <td th:text="${installmentSaving.postTaxInterestRate}"></td>
+        <td th:text="${installmentSaving.postTaxInterest}"></td>
+        <td th:text="${installmentSaving.maximumPreferentialInterestRate}"></td>
+        <td th:text="${installmentSaving.membershipRestrictionStatus}"></td>
+        <td th:text="${installmentSaving.interestCalculationMethod}"></td>
+    </tr>
+</table>
+</body>
+</html>
