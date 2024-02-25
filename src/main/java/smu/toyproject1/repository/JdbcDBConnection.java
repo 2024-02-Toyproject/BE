@@ -171,18 +171,20 @@ public class JdbcDBConnection {
                 resultSet = preparedStatement.executeQuery();
 
                 while (resultSet.next()) {
-                    String company = resultSet.getString("금융회사");
-                    String productName = resultSet.getString("상품명");
-                    String accrualMethod = resultSet.getString("적립방식");
-                    String preTaxInterestRate = resultSet.getString("세전이자율");
-                    String postTaxInterestRate = resultSet.getString("세후이자율");
-                    String postTaxInterest = resultSet.getString("세후이자");
-                    String maximumPreferentialInterestRate = resultSet.getString("최고우대금리");
-                    String membershipRestrictionStatus = resultSet.getString("가입제한여부");
-                    String interestCalculationMethod = resultSet.getString("이자계산방식");
+                    String company = resultSet.getString("금융회사명");
+                    String productName = resultSet.getString("금융상품명");
+                    String applicationMethod = resultSet.getString("가입방법");
+                    String maturityInterestRate = resultSet.getString("만기후이자율");
+                    String preferentialConditions = resultSet.getString("우대조건");
+                    String eligibilityRestrictions = resultSet.getString("가입제한");
+                    String targetCustomers = resultSet.getString("가입대상");
+                    Long maximumLimit = resultSet.getLong("최고한도");
+                    String savingsInterestRateTypeName = resultSet.getString("저축금리유형명");
+                    Double savingsInterestRate = resultSet.getDouble("저축금리");
+                    Double maximumPreferentialRate = resultSet.getDouble("최고우대금리");
 
-                    InstallmentSavingProduct installmentSaving = new InstallmentSavingProduct(company, productName, accrualMethod, preTaxInterestRate
-                            , postTaxInterestRate, postTaxInterest, maximumPreferentialInterestRate, membershipRestrictionStatus, interestCalculationMethod);
+                    InstallmentSavingProduct installmentSaving = new InstallmentSavingProduct(company, productName, applicationMethod, maturityInterestRate
+                            , preferentialConditions, eligibilityRestrictions, targetCustomers, maximumLimit, savingsInterestRateTypeName, savingsInterestRate, maximumPreferentialRate);
                     installmentSavings.add(installmentSaving);
                 }
             }
