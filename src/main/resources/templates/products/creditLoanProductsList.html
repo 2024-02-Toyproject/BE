@@ -12,9 +12,31 @@
             padding: 8px;
             text-align: left;
         }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        .search-input {
+            width: 300px; /* 검색 창의 너비를 조정하세요 */
+            height: 40px;
+            padding: 5px;
+        }
+        .search-button {
+            padding: 16px 20px;
+            margin-left: 10px;
+        }
     </style>
 </head>
+
 <body>
+<!-- 검색 창 추가 -->
+<div class="search-container">
+    <input type="text" id="searchInput" class="search-input" placeholder="   검색어를 입력하세요">
+    <button onclick="search()" class="search-button">검색</button>
+</div>
+
 <table>
     <tr>
         <th>금융회사 명</th>
@@ -35,6 +57,34 @@
         <td th:text="${creditLoan.averageRate}"></td>
     </tr>
 </table>
+
+<script>
+    function search() {
+        var input = document.getElementById("searchInput").value.toLowerCase();
+        var rows = document.getElementsByTagName("tr");
+
+        for (var i = 1; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName("td");
+            var found = false;
+
+            for (var j = 0; j < cells.length; j++) {
+                var cellValue = cells[j].textContent || cells[j].innerText;
+
+                if (cellValue.toLowerCase().indexOf(input) > -1) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
+</script>
+
 </body>
 </html>
 
