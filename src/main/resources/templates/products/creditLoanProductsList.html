@@ -27,14 +27,38 @@
             padding: 16px 20px;
             margin-left: 10px;
         }
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            height: 30px;
+        }
+        .filter-container select {
+            margin: 0 10px;
+        }
     </style>
 </head>
 
 <body>
 <!-- 검색 창 추가 -->
 <div class="search-container">
-    <input type="text" id="searchInput" class="search-input" placeholder="   검색어를 입력하세요">
+    <input type="text" id="searchInput" class="search-input" placeholder="검색어를 입력하세요">
     <button onclick="search()" class="search-button">검색</button>
+</div>
+
+<div class="filter-container">
+    <select id="companySelect" class="company-select" onchange="filterTable()">
+        <option value="all">전체</option>
+        <option value="우리은행">우리은행</option>
+        <option value="제주은행">제주은행</option>
+        <option value="대구은행">대구은행</option>
+    </select>
+    <select id="methodSelect" class="method-select" onchange="filterTable()">
+        <option value="all">전체</option>
+        <option value="영업점">영업점</option>
+        <option value="인터넷">인터넷</option>
+        <option value="스마트폰">스마트폰</option>
+    </select>
 </div>
 
 <table>
@@ -59,7 +83,31 @@
 </table>
 
 <script>
+    function filterTable() {
+        var companySelect = document.getElementById("companySelect");
+        var methodSelect = document.getElementById("methodSelect");
+        var companyValue = companySelect.value;
+        var methodValue = methodSelect.value;
+
+        var table = document.querySelector("table");
+        var rows = table.querySelectorAll("tr");
+
+        for (var i = 1; i < rows.length; i++) {
+            var companyCell = rows[i].querySelectorAll("td")[0];
+            var methodCell = rows[i].querySelectorAll("td")[2];
+
+            if ((companyValue === "all" || companyCell.textContent === companyValue) &&
+                (methodValue === "all" || methodCell.textContent === methodValue)) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
+
     function search() {
+        var filterSelect = document.getElementById("filterSelect");
+        var selectedFilter = filterSelect.value.toLowerCase();
         var input = document.getElementById("searchInput").value.toLowerCase();
         var rows = document.getElementsByTagName("tr");
 
@@ -70,9 +118,26 @@
             for (var j = 0; j < cells.length; j++) {
                 var cellValue = cells[j].textContent || cells[j].innerText;
 
-                if (cellValue.toLowerCase().indexOf(input) > -1) {
-                    found = true;
-                    break;
+                if (selectedFilter === "averageRate") {
+                    // "평균 금리"인 경우, 숫자로 변환하여 비교
+                    var inputValue = parseFloat(input);
+                    var cellNumber = parseFloat(cellValue);
+                    if (!isNaN(inputValue) && cellNumber === inputValue) {
+                        found = true;
+                        break;
+                    }
+                } else if (selectedFilter === "company") {
+                    // "금융회사명"인 경우, 입력한 검색어가 포함되어 있는지 비교
+                    if (cellValue.toLowerCase().indexOf(input) > -1) {
+                        found = true;
+                        break;
+                    }
+                } else {
+                    // 다른 필터링 옵션인 경우, 일반적인 텍스트 비교
+                    if (cellValue.toLowerCase().indexOf(input) > -1) {
+                        found = true;
+                        break;
+                    }
                 }
             }
 
