@@ -73,7 +73,7 @@ public class JdbcDBConnection {
                     String loanType = resultSet.getString("대출종류명");
                     String cbCompany = resultSet.getString("CB 회사명");
                     String rateType = resultSet.getString("금리구분");
-                    int averageRate = resultSet.getInt("평균 금리");
+                    double averageRate = resultSet.getDouble("평균 금리");
 
                     CreditLoanProduct creditLoan = new CreditLoanProduct(company, productName, method, loanType, cbCompany, rateType, averageRate);
                     creditLoans.add(creditLoan);

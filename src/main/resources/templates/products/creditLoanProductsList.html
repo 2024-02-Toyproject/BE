@@ -48,16 +48,42 @@
 
 <div class="filter-container">
     <select id="companySelect" class="company-select" onchange="filterTable()">
+        <option value="all">은행</option>
         <option value="all">전체</option>
         <option value="우리은행">우리은행</option>
         <option value="제주은행">제주은행</option>
         <option value="대구은행">대구은행</option>
+        <option value="부산은행">부산은행</option>
+        <option value="광주은행">광주은행</option>
+        <option value="한국스탠다드차타드은행">한국스탠다드차타드은행</option>
+        <option value="경남은행">경남은행</option>
+        <option value="중소기업은행">중소기업은행</option>
+        <option value="한국씨티은행">한국씨티은행</option>
+        <option value="전북은행">전북은행</option>
+        <option value="경남은행">경남은행</option>
+        <option value="국민은행">국민은행</option>
+        <option value="신한은행">신한은행</option>
+        <option value="농협은행">농협은행</option>
+        <option value="하나은행">하나은행</option>
+        <option value="수협은행">수협은행</option>
+        <option value="케이뱅크">케이뱅크</option>
+        <option value="카카오뱅크">카카오뱅크</option>
+        <option value="토스">토스뱅크</option>
     </select>
     <select id="methodSelect" class="method-select" onchange="filterTable()">
-        <option value="all">전체</option>
+        <option value="all">가입 방법</option>
         <option value="영업점">영업점</option>
         <option value="인터넷">인터넷</option>
         <option value="스마트폰">스마트폰</option>
+        <option value="전화">전화(텔레뱅킹)</option>
+        <option value="모집인">모집인</option>
+        <option value="기타">기타</option>
+    </select>
+    <select id="loanTypeSelect" class="loanType-select" onchange="filterTable()">
+        <option value="all">대출종류</option>
+        <option value="일반신용">일반신용</option>
+        <option value="마이너스한도">마이너스한도</option>
+        <option value="장기카드">장기카드</option>
     </select>
 </div>
 
@@ -86,8 +112,10 @@
     function filterTable() {
         var companySelect = document.getElementById("companySelect");
         var methodSelect = document.getElementById("methodSelect");
+        var loanTypeSelect = document.getElementById("loanTypeSelect");
         var companyValue = companySelect.value;
         var methodValue = methodSelect.value;
+        var loanTypeValue = loanTypeSelect.value;
 
         var table = document.querySelector("table");
         var rows = table.querySelectorAll("tr");
@@ -95,19 +123,22 @@
         for (var i = 1; i < rows.length; i++) {
             var companyCell = rows[i].querySelectorAll("td")[0];
             var methodCell = rows[i].querySelectorAll("td")[2];
+            var loanTypeCell = rows[i].querySelectorAll("td")[3];
 
-            if ((companyValue === "all" || companyCell.textContent === companyValue) &&
-                (methodValue === "all" || methodCell.textContent === methodValue)) {
+            if ((companyValue === "all" || companyCell.textContent.includes(companyValue)) &&
+                (methodValue === "all" || methodCell.textContent.includes(methodValue)) &&
+                (loanTypeValue === "all" || loanTypeCell.textContent.includes(loanTypeValue))) {
                 rows[i].style.display = "";
             } else {
                 rows[i].style.display = "none";
             }
+
+
         }
     }
 
+    // 검색어로 데이터를 조회
     function search() {
-        var filterSelect = document.getElementById("filterSelect");
-        var selectedFilter = filterSelect.value.toLowerCase();
         var input = document.getElementById("searchInput").value.toLowerCase();
         var rows = document.getElementsByTagName("tr");
 
@@ -118,26 +149,9 @@
             for (var j = 0; j < cells.length; j++) {
                 var cellValue = cells[j].textContent || cells[j].innerText;
 
-                if (selectedFilter === "averageRate") {
-                    // "평균 금리"인 경우, 숫자로 변환하여 비교
-                    var inputValue = parseFloat(input);
-                    var cellNumber = parseFloat(cellValue);
-                    if (!isNaN(inputValue) && cellNumber === inputValue) {
-                        found = true;
-                        break;
-                    }
-                } else if (selectedFilter === "company") {
-                    // "금융회사명"인 경우, 입력한 검색어가 포함되어 있는지 비교
-                    if (cellValue.toLowerCase().indexOf(input) > -1) {
-                        found = true;
-                        break;
-                    }
-                } else {
-                    // 다른 필터링 옵션인 경우, 일반적인 텍스트 비교
-                    if (cellValue.toLowerCase().indexOf(input) > -1) {
-                        found = true;
-                        break;
-                    }
+                if (cellValue.toLowerCase().indexOf(input) > -1) {
+                    found = true;
+                    break;
                 }
             }
 
@@ -148,6 +162,7 @@
             }
         }
     }
+
 </script>
 
 </body>

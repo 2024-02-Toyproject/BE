@@ -13,9 +13,9 @@ public class CreditLoanProduct {
     private String loanType;
     private String cbCompany;
     private String rateType;
-    private int averageRate;
+    private double averageRate;
 
-    public CreditLoanProduct(String company, String productName, String method, String loanType, String cbCompany, String rateType, int averageRate) {
+    public CreditLoanProduct(String company, String productName, String method, String loanType, String cbCompany, String rateType, double averageRate) {
         this.company = company;
         this.productName = productName;
         this.method = method;
