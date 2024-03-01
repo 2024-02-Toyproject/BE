@@ -27,14 +27,66 @@
             padding: 16px 20px;
             margin-left: 10px;
         }
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            height: 30px;
+        }
+        .filter-container select {
+            margin: 0 10px;
+        }
     </style>
 </head>
 
 <body>
 <!-- 검색 창 추가 -->
 <div class="search-container">
-    <input type="text" id="searchInput" class="search-input" placeholder="   검색어를 입력하세요">
+    <input type="text" id="searchInput" class="search-input" placeholder="검색어를 입력하세요">
     <button onclick="search()" class="search-button">검색</button>
+</div>
+
+<div class="filter-container">
+    <select id="companySelect" class="company-select" onchange="filterTable()">
+        <option value="all">은행</option>
+        <option value="국민은행">국민은행</option>
+        <option value="경남은행">경남은행</option>
+        <option value="광주은행">광주은행</option>
+        <option value="농협은행">농협은행</option>
+        <option value="대구은행">대구은행</option>
+        <option value="부산은행">부산은행</option>
+        <option value="신한은행">신한은행</option>
+        <option value="수협은행">수협은행</option>
+        <option value="우리은행">우리은행</option>
+        <option value="중소기업은행">중소기업은행</option>
+        <option value="전북은행">전북은행</option>
+        <option value="제주은행">제주은행</option>
+        <option value="카카오뱅크">카카오뱅크</option>
+        <option value="케이뱅크">케이뱅크</option>
+        <option value="토스">토스뱅크</option>
+        <option value="하나은행">하나은행</option>
+        <option value="한국스탠다드차타드은행">한국스탠다드차타드은행</option>
+        <option value="한국씨티은행">한국씨티은행</option>
+    </select>
+    <select id="methodSelect" class="method-select" onchange="filterTable()">
+        <option value="all">가입 방법</option>
+        <option value="영업점">영업점</option>
+        <option value="인터넷">인터넷</option>
+        <option value="스마트폰">스마트폰</option>
+        <option value="전화">전화(텔레뱅킹)</option>
+        <option value="기타">기타</option>
+    </select>
+    <select id="targetCustomerSelect" class="targetCustomer-select" onchange="filterTable()">
+        <option value="all">가입대상</option>
+        <option value="개인">개인</option>
+        <option value="개인사업자">개인사업자</option>
+        <option value="법인">법인</option>
+        <option value="제한없음">제한없음</option>
+    </select>
+    <select id="maximumPreferentialRateSelect" class="maximumPreferentialRate-select" onchange="maxChangeSelect()">
+        <option value="all">기본금리순</option>
+        <option value="maximum">최고금리순</option>
+    </select>
 </div>
 
 <table>
@@ -48,8 +100,8 @@
         <th>가입대상</th>
         <th>최고한도</th>
         <th>저축금리유형명</th>
-        <th>저축금리</th>
-        <th>최고우대금리</th>
+        <th>저축금리(%)</th>
+        <th>최고우대금리(%)</th>
     </tr>
     <tr th:each="fixedDeposit : ${fixedDeposits}">
         <td th:text="${fixedDeposit.bankName}"></td>
@@ -67,6 +119,36 @@
 </table>
 
 <script>
+    // 필터링 옵션으로 데이터 조회
+    function filterTable() {
+        var companySelect = document.getElementById("companySelect");
+        var methodSelect = document.getElementById("methodSelect");
+        var targetCustomerSelect = document.getElementById("targetCustomerSelect");
+        var companyValue = companySelect.value;
+        var methodValue = methodSelect.value;
+        var targetCustomerValue = targetCustomerSelect.value;
+
+        var table = document.querySelector("table");
+        var rows = table.querySelectorAll("tr");
+
+        for (var i = 1; i < rows.length; i++) {
+            var companyCell = rows[i].querySelectorAll("td")[0];
+            var methodCell = rows[i].querySelectorAll("td")[2];
+            var targetCustomerCell = rows[i].querySelectorAll("td")[6];
+
+            if ((companyValue === "all" || companyCell.textContent.includes(companyValue)) &&
+                (methodValue === "all" || methodCell.textContent.includes(methodValue)) &&
+                (targetCustomerValue === "all" || targetCustomerCell.textContent.includes(targetCustomerValue))) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+
+
+        }
+    }
+
+    // 검색어로 데이터를 조회
     function search() {
         var input = document.getElementById("searchInput").value.toLowerCase();
         var rows = document.getElementsByTagName("tr");
@@ -91,6 +173,39 @@
             }
         }
     }
+
+    // 최고금리순으로 정렬
+    function maxChangeSelect() {
+        // select 요소의 현재 값을 가져옴
+        var selectElement = document.getElementById("maximumPreferentialRateSelect");
+        var selectedValue = selectElement.value;
+
+        var table = document.querySelector("table");
+        var rows = Array.from(table.getElementsByTagName("tr"));
+
+        var dataRows = rows.slice(1);
+
+        // "최고우대금리" 값을 기준으로 정렬
+        if (selectedValue === "maximum") {
+            dataRows.sort(function(a, b) {
+                var aValue = parseFloat(a.cells[10].innerText);
+                var bValue = parseFloat(b.cells[10].innerText);
+                return bValue - aValue; // 내림차순으로 정렬
+            });
+        } else if (selectedValue === "all") {
+            // "기본금리순"을 선택했을 때 최저금리순으로 정렬
+            dataRows.sort(function(a, b) {
+                var aValue = parseFloat(a.cells[10].innerText);
+                var bValue = parseFloat(b.cells[10].innerText);
+                return aValue - bValue; // 오름차순으로 정렬
+            });
+        }
+
+        dataRows.forEach(function(row) {
+            table.appendChild(row);
+        });
+    }
+
 </script>
 
 </body>
