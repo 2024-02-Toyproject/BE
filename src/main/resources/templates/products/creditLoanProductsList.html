@@ -49,26 +49,24 @@
 <div class="filter-container">
     <select id="companySelect" class="company-select" onchange="filterTable()">
         <option value="all">은행</option>
-        <option value="all">전체</option>
-        <option value="우리은행">우리은행</option>
-        <option value="제주은행">제주은행</option>
+        <option value="국민은행">국민은행</option>
+        <option value="경남은행">경남은행</option>
+        <option value="광주은행">광주은행</option>
+        <option value="농협은행">농협은행</option>
         <option value="대구은행">대구은행</option>
         <option value="부산은행">부산은행</option>
-        <option value="광주은행">광주은행</option>
-        <option value="한국스탠다드차타드은행">한국스탠다드차타드은행</option>
-        <option value="경남은행">경남은행</option>
-        <option value="중소기업은행">중소기업은행</option>
-        <option value="한국씨티은행">한국씨티은행</option>
-        <option value="전북은행">전북은행</option>
-        <option value="경남은행">경남은행</option>
-        <option value="국민은행">국민은행</option>
         <option value="신한은행">신한은행</option>
-        <option value="농협은행">농협은행</option>
-        <option value="하나은행">하나은행</option>
         <option value="수협은행">수협은행</option>
-        <option value="케이뱅크">케이뱅크</option>
+        <option value="우리은행">우리은행</option>
+        <option value="중소기업은행">중소기업은행</option>
+        <option value="전북은행">전북은행</option>
+        <option value="제주은행">제주은행</option>
         <option value="카카오뱅크">카카오뱅크</option>
+        <option value="케이뱅크">케이뱅크</option>
         <option value="토스">토스뱅크</option>
+        <option value="하나은행">하나은행</option>
+        <option value="한국스탠다드차타드은행">한국스탠다드차타드은행</option>
+        <option value="한국씨티은행">한국씨티은행</option>
     </select>
     <select id="methodSelect" class="method-select" onchange="filterTable()">
         <option value="all">가입 방법</option>
@@ -109,6 +107,7 @@
 </table>
 
 <script>
+    // 필터링 옵션으로 데이터 조회
     function filterTable() {
         var companySelect = document.getElementById("companySelect");
         var methodSelect = document.getElementById("methodSelect");
