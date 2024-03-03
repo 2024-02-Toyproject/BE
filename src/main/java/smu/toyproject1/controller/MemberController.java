@@ -39,6 +39,8 @@ public class MemberController {
         if (loginResult != null) {
             // login 성공
             session.setAttribute("loginName", loginResult.getMemberName());
+            session.setAttribute("gender", loginResult.getGender());
+            session.setAttribute("age", loginResult.getAge());
             return "home";
         } else {
             // login 실패

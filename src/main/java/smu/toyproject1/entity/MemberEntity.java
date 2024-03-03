@@ -22,12 +22,18 @@ public class MemberEntity {
 
     @Column
     private String memberPassword;
+    @Column
+    private String gender;
+    @Column
+    private String age;
 
     public static MemberEntity toMemberEntity(MemberDTO memberDTO){
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.setMemberName(memberDTO.getMemberName());
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
         memberEntity.setMemberPassword(memberDTO.getMemberPassword());
+        memberEntity.setGender(memberDTO.getGender());
+        memberEntity.setAge(memberDTO.getAge());
         return memberEntity;
     }
 
