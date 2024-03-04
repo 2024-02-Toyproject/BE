@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>mypage</title>
@@ -10,6 +10,12 @@
     <h2>마이페이지</h2>
     <p><span th:text="${session.loginName}"></span> 님, 반갑습니다.</p>
     <p><span th:text="${session.age}"></span>세 / <span th:text="${session.gender}"></span></p>
+
+    <!-- 관심 상품 ID 목록 -->
+    <h3>관심 상품 목록</h3>
+    <ul>
+        <li th:each="productId : ${favoriteProductIds}" th:text="${productId}"></li>
+    </ul>
 </div>
 </body>
 </html>

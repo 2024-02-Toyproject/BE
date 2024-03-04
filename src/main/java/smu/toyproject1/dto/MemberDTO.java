@@ -20,6 +20,7 @@ public class MemberDTO {
 
     public static MemberDTO toMemberDTO(MemberEntity memberEntity) {
         MemberDTO memberDTO = new MemberDTO();
+
         memberDTO.setId(memberEntity.getId());
         memberDTO.setMemberName(memberEntity.getMemberName());
         memberDTO.setMemberEmail(memberEntity.getMemberEmail());

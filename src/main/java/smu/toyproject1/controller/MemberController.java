@@ -1,5 +1,6 @@
 package smu.toyproject1.controller;
 
+import ch.qos.logback.core.model.Model;
 import smu.toyproject1.dto.MemberDTO;
 import smu.toyproject1.service.MemberService;
 import jakarta.servlet.http.HttpSession;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -54,6 +57,13 @@ public class MemberController {
     }
     @GetMapping("/member/myPage")
     public String myPage() {
+        return "mypage";
+    }
+
+    @GetMapping("/mypage")
+    public String myPage(Model model, HttpSession session) {
+        String userEmail = (String) session.getAttribute("loginEmail");
+        model.addText("favoriteProductIds");
         return "mypage";
     }
 }

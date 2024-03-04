@@ -1,25 +1,29 @@
 package smu.toyproject1.service;
 
+import smu.toyproject1.dto.FavDTO;
+import smu.toyproject1.entity.FavEntity;
+import smu.toyproject1.repository.FavRepository;
 import smu.toyproject1.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import smu.toyproject1.dto.MemberDTO;
 import smu.toyproject1.entity.MemberEntity;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final FavRepository favRepository;
+
     public void save(MemberDTO memberDTO) {
-        // 1. dto -> entity 변환
-        // 2. repository의 save 메서드 호출
         MemberEntity memberEntity = MemberEntity.toMemberEntity(memberDTO);
         memberRepository.save(memberEntity);
-
-        // repository의 save메서드 호출, 조건: entity객체를 넘겨줘야 함
     }
+
 
     public MemberDTO login(MemberDTO memberDTO) {
         /*
@@ -45,4 +49,14 @@ public class MemberService {
         }
 
     }
+    // 사용자의 관심 상품 목록 조회
+    public List<FavDTO> getFavoriteProducts(String memberEmail) {
+        // favRepository 인스턴스를 통해 메소드를 호출합니다.
+        List<FavEntity> favEntities = favRepository.findAllByMemberEmail(memberEmail);
+        return favEntities.stream()
+                .map(FavEntity::toFavDTO)
+                .collect(Collectors.toList());
+    }
+
+
 }
