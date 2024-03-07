@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface FavRepository extends JpaRepository<FavEntity, Long> {
-    // 사용자의 이메일로 모든 관심 상품 엔티티를 조회합니다.
-    List<FavEntity> findAllByMemberEmail(String memberEmail);
+    List<FavEntity> findByMemberEmail(String memberEmail);
+    // 필요한 추가 메서드 정의 가능
 }

@@ -96,6 +96,7 @@
         <th>평균 금리</th>
         <th>관심 상품 등록</th>
     </tr>
+
     <tr th:each="creditLoan : ${creditLoans}">
         <td th:text="${creditLoan.company}"></td>
         <td th:text="${creditLoan.productName}"></td>
@@ -105,36 +106,13 @@
         <td th:text="${creditLoan.rateType}"></td>
         <td th:text="${creditLoan.averageRate}"></td>
         <td>
-            <button data-credit-loan-id="${creditLoan.id}" data-member-email="${session.loginEmail}" onclick="saveToFavorites(this)">❤️</button>
+            <input type="submit" value="관심목록에 추가">
         </td>
     </tr>
+
 </table>
 
 <script>
-    // 관심상품 등록
-    function saveToFavorites(button) {
-        // 버튼의 데이터 속성에서 creditLoan ID와 member email을 가져옵니다.
-        var creditLoanId = button.getAttribute('data-credit-loan-id');
-        var memberEmail = button.getAttribute('data-member-email');
-
-        // AJAX를 사용하여 서버에 데이터를 전송합니다.
-        $.ajax({
-            method: "post",
-            url: "/favorite", // 서버의 엔드포인트 URL
-            data: {
-                userEmail: memberEmail,
-                productID: creditLoanId
-            },
-            success: function(response) {
-                // 성공 시 알림을 표시합니다.
-                alert("Added to favorites successfully!");
-            },
-            error: function(xhr, status, error) {
-                // 실패 시 알림을 표시합니다.
-                alert("Failed to add to favorites!");
-            }
-        });
-    }
 
     // 필터링 옵션으로 데이터 조회
     function filterTable() {

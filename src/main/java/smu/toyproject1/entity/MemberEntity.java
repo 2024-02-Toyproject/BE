@@ -36,8 +36,4 @@ public class MemberEntity {
         memberEntity.setAge(memberDTO.getAge());
         return memberEntity;
     }
-
-
-
-
 }
