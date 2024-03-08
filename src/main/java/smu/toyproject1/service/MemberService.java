@@ -17,7 +17,6 @@ public class MemberService {
         memberRepository.save(memberEntity);
     }
 
-
     public MemberDTO login(MemberDTO memberDTO) {
         /*
             1. 회원이 입력한 이메일로 DB에서 조회를 함

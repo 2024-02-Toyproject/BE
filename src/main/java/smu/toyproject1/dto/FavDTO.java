@@ -1,13 +1,24 @@
 package smu.toyproject1.dto;
+import smu.toyproject1.entity.FavEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class FavDTO {
-    private String memberEmail; // 사용자 이메일
-    private String company;     // 금융회사 명
-    private String productName; // 금융 상품명
+    private String memberEmail;
+    private Long product_id;
+
+    // FavEntity 객체를 받아 FavDTO 객체로 변환
+    public static FavDTO toFavDTO(FavEntity favEntity) {
+        FavDTO favDTO = new FavDTO();
+        favDTO.setMemberEmail(favEntity.getMemberEmail());
+        favDTO.setProduct_id(favEntity.getProduct_id());
+        return favDTO;
+    }
+
 }
