@@ -58,10 +58,4 @@ public class MemberController {
         return "mypage";
     }
 
-    @GetMapping("/mypage")
-    public String myPage(Model model, HttpSession session) {
-        String userEmail = (String) session.getAttribute("loginEmail");
-        model.addText("favoriteProductIds");
-        return "mypage";
-    }
 }

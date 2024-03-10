@@ -23,6 +23,7 @@ public class CreditLoanProduct {
         this.cbCompany = cbCompany;
         this.rateType = rateType;
         this.averageRate = averageRate;
+
     }
 
     /*

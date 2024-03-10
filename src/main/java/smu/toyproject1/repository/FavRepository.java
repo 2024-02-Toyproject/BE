@@ -10,5 +10,4 @@ import java.util.Optional;
 
 @Repository
 public interface FavRepository extends JpaRepository<FavEntity, Long> {
-    Optional<FavEntity> findByMemberEmail(String memberEmail);
 }

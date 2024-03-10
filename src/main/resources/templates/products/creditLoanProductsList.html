@@ -96,24 +96,49 @@
         <th>평균 금리</th>
         <th>관심 상품 등록</th>
     </tr>
-    <form action="/fav/save" method="post">
-    <tr th:each="creditLoan : ${creditLoans}">
-        <td th:text="${creditLoan.company}"></td>
-        <td th:text="${creditLoan.productName}"></td>
-        <td th:text="${creditLoan.method}"></td>
-        <td th:text="${creditLoan.loanType}"></td>
-        <td th:text="${creditLoan.cbCompany}"></td>
-        <td th:text="${creditLoan.rateType}"></td>
-        <td th:text="${creditLoan.averageRate}"></td>
-        <td>
-            <input type="submit" value="관심목록에 추가">
-        </td>
-    </tr>
+    <form id="favForm" action="/fav/save" method="post">
+        <table>
+            <tbody>
+            <tr th:each="creditLoan : ${creditLoans}">
+                <td th:text="${creditLoan.company}"></td>
+                <td th:text="${creditLoan.productName}"></td>
+                <td th:text="${creditLoan.method}"></td>
+                <td th:text="${creditLoan.loanType}"></td>
+                <td th:text="${creditLoan.cbCompany}"></td>
+                <td th:text="${creditLoan.rateType}"></td>
+                <td th:text="${creditLoan.averageRate}"></td>
+                <td>
+                    <button type="button" onclick="addToFav(this)">관심목록에 추가</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </form>
 
-</table>
+    <script>
+        function addToFav(button) {
+            var row = button.closest("tr"); // 현재 버튼이 있는 행을 가져옴
+            var company = row.cells[0].innerText; // 첫 번째 열의 데이터(회사)를 가져옴
+            var productName = row.cells[1].innerText; // 두 번째 열의 데이터(제품명)를 가져옴
 
-<script>
+            // 폼에 hidden input을 추가하여 데이터를 전송
+            var form = document.getElementById("favForm");
+            var companyInput = document.createElement("input");
+            companyInput.type = "hidden";
+            companyInput.name = "company";
+            companyInput.value = company;
+            form.appendChild(companyInput);
+
+            var productNameInput = document.createElement("input");
+            productNameInput.type = "hidden";
+            productNameInput.name = "productName";
+            productNameInput.value = productName;
+            form.appendChild(productNameInput);
+
+            // 폼을 전송
+            form.submit();
+        }
+
 
     // 필터링 옵션으로 데이터 조회
     function filterTable() {

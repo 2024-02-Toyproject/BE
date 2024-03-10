@@ -10,14 +10,15 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class FavDTO {
-    private String memberEmail;
-    private Long product_id;
+    private String member_email;
+    private String company;
+    private String productName;
 
     // FavEntity 객체를 받아 FavDTO 객체로 변환
     public static FavDTO toFavDTO(FavEntity favEntity) {
         FavDTO favDTO = new FavDTO();
-        favDTO.setMemberEmail(favEntity.getMemberEmail());
-        favDTO.setProduct_id(favEntity.getProduct_id());
+        favDTO.setCompany(favEntity.getCompany());
+        favDTO.setProductName(favEntity.getProductName());
         return favDTO;
     }
 

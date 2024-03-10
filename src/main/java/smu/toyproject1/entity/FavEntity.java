@@ -8,22 +8,25 @@ import smu.toyproject1.dto.FavDTO;
 @Entity
 @Setter
 @Getter
-@Table(name="UserInterest")
+@Table(name="user_interest")
 public class FavEntity {
     @Id // pk 지정
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
     private Long id;
 
+    @Column
+    private String member_email;
+
     @Column // unique 제약조건 추가
-    private String memberEmail;
+    private String company;
 
     @Column
-    private Long product_id;
+    private String productName;
 
     public static FavEntity toFavEntity(FavDTO favDTO){
         FavEntity favEntity = new FavEntity();
-        favEntity.setMemberEmail(favDTO.getMemberEmail());
-        favEntity.setProduct_id(favDTO.getProduct_id());
+        favEntity.setCompany(favDTO.getCompany());
+        favEntity.setProductName(favDTO.getProductName());
         return favEntity;
     }
 
