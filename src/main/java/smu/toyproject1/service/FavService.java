@@ -23,6 +23,7 @@ public class FavService {
         favRepository.save(favEntity);
     }
 
+
     @PostMapping("/fav/save")
     public FavDTO addFav(FavDTO favDTO) {
         // DTO를 Entity로 변환

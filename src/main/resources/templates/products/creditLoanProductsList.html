@@ -97,6 +97,7 @@
         <th>관심 상품 등록</th>
     </tr>
     <form id="favForm" action="/fav/save" method="post">
+        <input type="hidden" id="loginNameInput" name="loginName">
         <table>
             <tbody>
             <tr th:each="creditLoan : ${creditLoans}">
@@ -114,6 +115,12 @@
             </tbody>
         </table>
     </form>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var loginName = /*[[${session.loginName}]]*/ '';
+        /*]]>*/
+    </script>
 
     <script>
         function addToFav(button) {
@@ -135,10 +142,13 @@
             productNameInput.value = productName;
             form.appendChild(productNameInput);
 
+            // loginName 값을 hidden input에 설정
+            var loginNameInput = document.getElementById("loginNameInput");
+            loginNameInput.value = loginName;
+
             // 폼을 전송
             form.submit();
         }
-
 
     // 필터링 옵션으로 데이터 조회
     function filterTable() {

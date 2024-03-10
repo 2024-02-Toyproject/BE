@@ -15,7 +15,7 @@ public class FavEntity {
     private Long id;
 
     @Column
-    private String member_email;
+    private String loginName;
 
     @Column // unique 제약조건 추가
     private String company;
@@ -25,6 +25,7 @@ public class FavEntity {
 
     public static FavEntity toFavEntity(FavDTO favDTO){
         FavEntity favEntity = new FavEntity();
+        favEntity.setLoginName(favDTO.getLoginName());
         favEntity.setCompany(favDTO.getCompany());
         favEntity.setProductName(favDTO.getProductName());
         return favEntity;
