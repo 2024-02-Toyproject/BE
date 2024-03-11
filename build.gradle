@@ -25,8 +25,28 @@ dependencies {
 	implementation 'org.projectlombok:lombok'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	// HttpServletRequest 객체 주입 및 클라이언트 요청 정보 처리를 위해 추가
+	compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+// 오류 발생
+//dependencies {
+//	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+//	implementation 'org.springframework.boot:spring-boot-starter-web'
+//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//	// MySQL JDBC 드라이버
+//	implementation 'mysql:mysql-connector-java:8.0.26'
+//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//	implementation 'org.projectlombok:lombok'
+//	compileOnly 'org.projectlombok:lombok'
+//	annotationProcessor 'org.projectlombok:lombok'
+//	// HttpServletRequest 객체를 주입하기 위한 spring-web 모듈 및 Servlet API를 추가
+//	implementation 'org.springframework:spring-web:6.1.4'
+//	compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
+//	implementation 'org.springframework.boot:spring-boot-autoconfigure:2.5.4'
+//}
+
