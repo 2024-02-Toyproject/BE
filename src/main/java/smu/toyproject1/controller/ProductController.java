@@ -6,10 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import smu.toyproject1.entity.CreditLoanProduct;
-import smu.toyproject1.entity.FixedDepositProduct;
-import smu.toyproject1.entity.InstallmentSavingProduct;
-import smu.toyproject1.entity.TaxSavingProduct;
+import smu.toyproject1.entity.*;
 import smu.toyproject1.repository.JdbcDBConnection;
 
 import java.util.List;
@@ -56,6 +53,13 @@ public class ProductController {
         model.addAttribute("taxSavings", taxSavings);
         return "products/taxSavingProductsList";
     }
+    @GetMapping("/member/myPage")
+    public String getFavorite(Model model) {
+        List<Favorite> favorites = jdbcDBConnection.retrieveFavDataFromTable("user_interest");
+        model.addAttribute("favorites", favorites);
+        return "mypage";
+    }
+
 }
 
 

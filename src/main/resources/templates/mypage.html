@@ -11,8 +11,17 @@
     <p><span th:text="${session.loginName}"></span> 님, 반갑습니다.</p>
     <p><span th:text="${session.age}"></span>세 / <span th:text="${session.gender}"></span></p>
 
-    <!-- 관심 상품 ID 목록 -->
     <h3>관심 상품 목록</h3>
+    <table>
+        <tr>
+            <th>회사명</th>
+            <th>상품 이름</th>
+        </tr>
+        <tr th:each="favorite : ${favorites}">
+            <td th:text="${favorite.company}"></td>
+            <td th:text="${favorite.productName}"></td>
+        </tr>
+    </table>
 
 </div>
 </body>

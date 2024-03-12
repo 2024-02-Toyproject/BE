@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>테이블 데이터</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <th>금융상품</th>
+        <th>주요판매회사</th>
+
+    </tr>
+    <tr th:each="favorite : ${favorites}">
+        <td th:text="${favorite.company}"></td>
+        <td th:text="${favorite.productName}"></td>
+    </tr>
+</table>
+</body>
+</html>
