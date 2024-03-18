@@ -53,9 +53,6 @@ public class MemberController {
         session.invalidate();
         return "index";
     }
-    @GetMapping("/member/myPage")
-    public String myPage() {
-        return "mypage";
-    }
+
 
 }

@@ -1,10 +1,7 @@
 package smu.toyproject1.repository;
 
 import org.springframework.stereotype.Component;
-import smu.toyproject1.entity.CreditLoanProduct;
-import smu.toyproject1.entity.FixedDepositProduct;
-import smu.toyproject1.entity.InstallmentSavingProduct;
-import smu.toyproject1.entity.TaxSavingProduct;
+import smu.toyproject1.entity.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -262,5 +259,51 @@ public class JdbcDBConnection {
         }
         return taxSavingProducts;
     }
+
+    public static List<Favorite> retrieveFavDataFromTable(String tableName) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<Favorite> favorites = new ArrayList<>();
+
+        try {
+            connection = getConnection();
+            if (connection != null) {
+                String sql = "SELECT * FROM " + tableName;
+                preparedStatement = connection.prepareStatement(sql);
+                resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    String loginName = resultSet.getString("login_name");
+                    String company = resultSet.getString("company");
+                    String productName = resultSet.getString("product_name");
+
+                    Favorite favorite = new Favorite(loginName, company, productName);
+                    favorites.add(favorite);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("데이터 조회 오류입니다.");
+            e.printStackTrace();
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            closeConnection(connection);
+        }
+        return favorites;
+    }
+
 
 }

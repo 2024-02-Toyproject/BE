@@ -12,7 +12,6 @@ import smu.toyproject1.dto.FavDTO;
 public class FavEntity {
     @Id // pk 지정
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
-    private Long id;
 
     @Column
     private String loginName;

@@ -79,6 +79,13 @@ public class ProductController {
         model.addAttribute("taxSavings", taxSavings);
         return "products/taxSavingProductsList";
     }
+    @GetMapping("/member/myPage")
+    public String getFavorite(Model model) {
+        List<Favorite> favorites = jdbcDBConnection.retrieveFavDataFromTable("user_interest");
+        model.addAttribute("favorites", favorites);
+        return "mypage";
+    }
+
 }
 
 
