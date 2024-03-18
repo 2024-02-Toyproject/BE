@@ -36,25 +36,44 @@ public class ProductController {
         return "pages/product/DepositPage";
     }
 
-     //검색어로 정기예금 상품 목록 조회
     @PostMapping("/deposit")
-    public String getSearchedDeposits(@RequestParam("searchWord") String searchWord) {
+    public String searchAndFilterDeposits(
+            @RequestParam("searchWord") String searchWord,
+            @RequestParam("selectedBank") String selectedBank,
+            @RequestParam("selectedJoinWay") String selectedJoinWay,
+            @RequestParam("selectedJoinObject") String selectedJoinObject,
+            @RequestParam("selectedSortWay") String selectedSortWay) {
+
         // 검색어를 포함한 모든 예금 상품 데이터를 불러옴
         depositService.getSearchedDeposits(searchWord);
 
-        return "redirect:/deposit";
-    }
-
-    // 필터링된 정기예금 상품 목록 조회
-    @PostMapping("/deposit")
-    public String getFilteredDeposits(@RequestParam("selectedBank") String selectedBank,
-                                      @RequestParam("selectedJoinWay") String selectedJoinWay,
-                                      @RequestParam("selectedJoinObject") String selectedJoinObject,
-                                      @RequestParam("selectedSortWay") String selectedSortWay) {
-
+        // 필터링된 정기예금 상품 목록 조회
         depositService.getFilteredDeposits(selectedBank, selectedJoinWay, selectedJoinObject, selectedSortWay);
+
         return "redirect:/deposit";
     }
+
+
+
+//     //검색어로 정기예금 상품 목록 조회
+//    @PostMapping("/deposit")
+//    public String getSearchedDeposits(@RequestParam("searchWord") String searchWord) {
+//        // 검색어를 포함한 모든 예금 상품 데이터를 불러옴
+//        depositService.getSearchedDeposits(searchWord);
+//
+//        return "redirect:/deposit";
+//    }
+
+//    // 필터링된 정기예금 상품 목록 조회
+//    @PostMapping("/deposit")
+//    public String getFilteredDeposits(@RequestParam("selectedBank") String selectedBank,
+//                                      @RequestParam("selectedJoinWay") String selectedJoinWay,
+//                                      @RequestParam("selectedJoinObject") String selectedJoinObject,
+//                                      @RequestParam("selectedSortWay") String selectedSortWay) {
+//
+//        depositService.getFilteredDeposits(selectedBank, selectedJoinWay, selectedJoinObject, selectedSortWay);
+//        return "redirect:/deposit";
+//    }
 
     // 신용대출 상품 목록 조회
     @GetMapping("/creditLoan")
