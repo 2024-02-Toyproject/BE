@@ -5,12 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import smu.toyproject1.entity.CreditLoanProduct;
-import smu.toyproject1.entity.FixedDepositProduct;
-import smu.toyproject1.entity.InstallmentSavingProduct;
-import smu.toyproject1.entity.TaxSavingProduct;
+import smu.toyproject1.entity.*;
 import smu.toyproject1.repository.JdbcDBConnection;
+import smu.toyproject1.service.DepositService;
 
 import java.util.List;
 
@@ -24,6 +23,38 @@ public class ProductController {
      */
     @Autowired // 의존성 주입
     private JdbcDBConnection jdbcDBConnection;
+    @Autowired
+    private DepositService depositService;
+
+    // 정기예금 상품 목록 조회 (수정완료)
+    @GetMapping("/deposit")
+    public String getFixedDepositProducts(Model model) {
+        List<FixedDepositProduct> fixedDeposits = depositService.getAllDeposits();
+        // 가져온 데이터들을 model에 담아서 fixedDepositProductsList에 넘김
+        model.addAttribute("fixedDeposits", fixedDeposits);
+//        return "products/fixedDepositProductsList";
+        return "pages/product/DepositPage";
+    }
+
+     //검색어로 정기예금 상품 목록 조회
+    @PostMapping("/deposit")
+    public String getSearchedDeposits(@RequestParam("searchWord") String searchWord) {
+        // 검색어를 포함한 모든 예금 상품 데이터를 불러옴
+        depositService.getSearchedDeposits(searchWord);
+
+        return "redirect:/deposit";
+    }
+
+    // 필터링된 정기예금 상품 목록 조회
+    @PostMapping("/deposit")
+    public String getFilteredDeposits(@RequestParam("selectedBank") String selectedBank,
+                                      @RequestParam("selectedJoinWay") String selectedJoinWay,
+                                      @RequestParam("selectedJoinObject") String selectedJoinObject,
+                                      @RequestParam("selectedSortWay") String selectedSortWay) {
+
+        depositService.getFilteredDeposits(selectedBank, selectedJoinWay, selectedJoinObject, selectedSortWay);
+        return "redirect:/deposit";
+    }
 
     // 신용대출 상품 목록 조회
     @GetMapping("/creditLoan")
@@ -31,14 +62,6 @@ public class ProductController {
         List<CreditLoanProduct> creditLoans = jdbcDBConnection.retrieveCLDataFromTable("신용대출");
         model.addAttribute("creditLoans", creditLoans);
         return "products/creditLoanProductsList";
-    }
-
-    // 정기예금 상품 목록 조회
-    @GetMapping("/fixedDeposit")
-    public String getFixedDepositProducts(Model model) {
-        List<FixedDepositProduct> fixedDeposits = jdbcDBConnection.retrieveFDDataFromTable("정기예금");
-        model.addAttribute("fixedDeposits", fixedDeposits);
-        return "products/fixedDepositProductsList";
     }
 
     // 적금 상품 목록 조회
