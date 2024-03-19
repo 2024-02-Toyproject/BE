@@ -24,66 +24,49 @@ public class DepositService {
         return depositRepository.findAll("정기예금");
     }
 
-    // 검색어가 포함된 데이터를 조회
-    public List<FixedDepositProduct> getSearchedDeposits(String searchWord) {
-
-        // 검색어가 포함된 데이터를 담을 객체
-        List<FixedDepositProduct> searchedDeposits = new ArrayList<>();
-
-        // 전체 정기예금 데이터 담을 객체
-        List<FixedDepositProduct> allDeposits = depositRepository.findAll("정기예금");
-
-        for (FixedDepositProduct deposit : allDeposits) {
-            if (containsSearchWord(deposit, searchWord)) {
-                searchedDeposits.add(deposit);
-            }
-        }
-        return searchedDeposits;
-    }
-
-    public boolean containsSearchWord(FixedDepositProduct depositProduct, String searchWord) {
-        String depositProductData = depositProduct.getBankName() +
-                depositProduct.getProductName() +
-                depositProduct.getJoinMethod() +
-                depositProduct.getMaturityInterestRate() +
-                depositProduct.getPreferentialConditions() +
-                depositProduct.getJoinRestrictions() +
-                depositProduct.getTargetCustomers() +
-                depositProduct.getInterestRateType();
-
-        return depositProductData.toLowerCase().contains(searchWord.toLowerCase());
-    }
-
-    // 필터링 옵션에 맞춰서 조회
-    public List<FixedDepositProduct> getFilteredDeposits(String selectedBank, String selectedJoinWay,
+    // 검색어 및 필터링 옵션을 적용한 데이터 조회
+    public List<FixedDepositProduct> getFilteredDeposits(String searchWord, String selectedBank, String selectedJoinWay,
                                                          String selectedJoinObject, String selectedSortWay) {
-        // 필터링된 데이터 담을 객체
         List<FixedDepositProduct> filteredDeposits = new ArrayList<>();
-
-        // 전체 정기예금 데이터 담을 객체
         List<FixedDepositProduct> allDeposits = depositRepository.findAll("정기예금");
 
         for (FixedDepositProduct deposit : allDeposits) {
-            if ((selectedBank.equals("all") || deposit.getBankName().equals(selectedBank)) &&
-                    (selectedJoinWay.equals("all") || deposit.getJoinMethod().equals(selectedJoinWay)) &&
-                    (selectedJoinObject.equals("all") || deposit.getTargetCustomers().equals(selectedJoinObject))) {
+            String depositProductData = deposit.getBankName() +
+                    deposit.getProductName() +
+                    deposit.getJoinMethod() +
+                    deposit.getMaturityInterestRate() +
+                    deposit.getPreferentialConditions() +
+                    deposit.getJoinRestrictions() +
+                    deposit.getTargetCustomers() +
+                    deposit.getInterestRateType();
+
+            boolean containsSearchWord = searchWord != null && !searchWord.isEmpty() &&
+                    depositProductData.toLowerCase().contains(searchWord.toLowerCase());
+
+            boolean matchesBank = selectedBank == null || selectedBank.equals("all") || deposit.getBankName().equals(selectedBank);
+            boolean matchesJoinWay = selectedJoinWay == null || selectedJoinWay.equals("all") || deposit.getJoinMethod().equals(selectedJoinWay);
+            boolean matchesJoinObject = selectedJoinObject == null || selectedJoinObject.equals("all") || deposit.getTargetCustomers().equals(selectedJoinObject);
+
+
+            if ((searchWord == null || containsSearchWord) && matchesBank && matchesJoinWay && matchesJoinObject) {
                 filteredDeposits.add(deposit);
             }
         }
 
-        // 정렬된 데이터 담을 객체 (기본금리/최고금리)
         List<FixedDepositProduct> sortedDeposits = new ArrayList<>();
 
-        // "최고우대금리" 값을 기준으로 정렬
-        if (selectedSortWay.equals("maximum")) {
-            sortedDeposits = filteredDeposits.stream()
-                    .sorted(Comparator.comparingDouble(FixedDepositProduct::getMaximumPreferentialRate).reversed())
-                    .collect(Collectors.toList());
-        } else if (selectedSortWay.equals("all")) {
-            // "기본금리순"을 선택했을 때 최저금리순으로 정렬
-            sortedDeposits = filteredDeposits.stream()
-                    .sorted(Comparator.comparingDouble(FixedDepositProduct::getMaximumPreferentialRate))
-                    .collect(Collectors.toList());
+        if (selectedSortWay != null && !selectedSortWay.isEmpty()) {
+            if (selectedSortWay.equals("maximum")) {
+                sortedDeposits = filteredDeposits.stream()
+                        .sorted(Comparator.comparingDouble(FixedDepositProduct::getMaximumPreferentialRate).reversed())
+                        .collect(Collectors.toList());
+            } else if (selectedSortWay.equals("all")) {
+                sortedDeposits = filteredDeposits.stream()
+                        .sorted(Comparator.comparingDouble(FixedDepositProduct::getMaximumPreferentialRate))
+                        .collect(Collectors.toList());
+            }
+        } else {
+            sortedDeposits = filteredDeposits;
         }
 
         return sortedDeposits;

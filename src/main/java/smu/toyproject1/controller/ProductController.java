@@ -1,6 +1,8 @@
 package smu.toyproject1.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,32 +28,36 @@ public class ProductController {
     @Autowired
     private DepositService depositService;
 
-    // 정기예금 상품 목록 조회 (수정완료)
-    @GetMapping("/deposit")
-    public String getFixedDepositProducts(Model model) {
+    // 정기예금 상품 목록 조회
+    @GetMapping("/fixedDeposit")
+    public ResponseEntity<List<FixedDepositProduct>> getFixedDepositProducts() {
         List<FixedDepositProduct> fixedDeposits = depositService.getAllDeposits();
-        // 가져온 데이터들을 model에 담아서 fixedDepositProductsList에 넘김
-        model.addAttribute("fixedDeposits", fixedDeposits);
-//        return "products/fixedDepositProductsList";
-        return "pages/product/DepositPage";
+        return new ResponseEntity<>(fixedDeposits, HttpStatus.OK);
     }
 
-    @PostMapping("/deposit")
-    public String searchAndFilterDeposits(
-            @RequestParam("searchWord") String searchWord,
-            @RequestParam("selectedBank") String selectedBank,
-            @RequestParam("selectedJoinWay") String selectedJoinWay,
-            @RequestParam("selectedJoinObject") String selectedJoinObject,
-            @RequestParam("selectedSortWay") String selectedSortWay) {
-
-        // 검색어를 포함한 모든 예금 상품 데이터를 불러옴
-        depositService.getSearchedDeposits(searchWord);
-
-        // 필터링된 정기예금 상품 목록 조회
-        depositService.getFilteredDeposits(selectedBank, selectedJoinWay, selectedJoinObject, selectedSortWay);
-
-        return "redirect:/deposit";
+    // 정기예금 검색 & 필터링 반영하여 조회
+    @PostMapping("/fixedDeposit")
+    public ResponseEntity<String> processRequest(@RequestBody YourRequestData requestData) {
+        // requestData를 이용하여 원하는 로직을 수행합니다.
+        String bank = requestData.getBank();
+        String joinWay = requestData.getJoinWay();
+        String joinObject = requestData.getJoinObject();
+        String sortWay = requestData.getSortWay();
     }
+//    public ResponseEntity<List<FixedDepositProduct>> searchAndFilterDeposits(
+//            @RequestParam(value = "searchWord", required = false) String searchWord,
+//            @RequestParam(value = "selectedBank", required = false) String selectedBank,
+//            @RequestParam(value = "selectedJoinWay", required = false) String selectedJoinWay,
+//            @RequestParam(value = "selectedJoinObject", required = false) String selectedJoinObject,
+//            @RequestParam(value = "selectedSortWay", required = false) String selectedSortWay) {
+//
+//        // 검색어, 필터링을 적용한 데이터를 담은 객체
+//        List<FixedDepositProduct> filteredDeposits = depositService.getFilteredDeposits(searchWord, selectedBank, selectedJoinWay,
+//                selectedJoinObject, selectedSortWay);
+//
+//        // 프론트에서 요청한 데이터에 따라 검색 및 필터링된 예금 상품 데이터를 반환
+//        return ResponseEntity.ok(filteredDeposits);
+//    }
 
 
 
