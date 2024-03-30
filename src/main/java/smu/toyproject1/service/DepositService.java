@@ -3,6 +3,7 @@ package smu.toyproject1.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import smu.toyproject1.dto.DepositRequest;
 import smu.toyproject1.entity.FixedDepositProduct;
 import smu.toyproject1.repository.DepositRepository;
 
@@ -25,51 +26,31 @@ public class DepositService {
     }
 
     // 검색어 및 필터링 옵션을 적용한 데이터 조회
-    public List<FixedDepositProduct> getFilteredDeposits(String searchWord, String selectedBank, String selectedJoinWay,
-                                                         String selectedJoinObject, String selectedSortWay) {
-        List<FixedDepositProduct> filteredDeposits = new ArrayList<>();
+    public List<FixedDepositProduct> getFilteredDeposits(DepositRequest request) {
+        // 클라이언트에서 요청한 옵션 정보 받아오는 객체
+        String bank = request.getBank();
+        String joinWay = request.getJoinWay();
+        String joinObject = request.getJoinObject();
+        String sortWay = request.getSortWay();
+
+        // 필터링된 데이터 담을 객체
+        List<FixedDepositProduct> filteredDeposits;
+        // 전체 데이터 객체
         List<FixedDepositProduct> allDeposits = depositRepository.findAll("정기예금");
 
-        for (FixedDepositProduct deposit : allDeposits) {
-            String depositProductData = deposit.getBankName() +
-                    deposit.getProductName() +
-                    deposit.getJoinMethod() +
-                    deposit.getMaturityInterestRate() +
-                    deposit.getPreferentialConditions() +
-                    deposit.getJoinRestrictions() +
-                    deposit.getTargetCustomers() +
-                    deposit.getInterestRateType();
+        filteredDeposits = allDeposits.stream()
+                .filter(deposit -> deposit.getBankName().equals(bank) ||
+                        deposit.getJoinMethod().equals(joinWay) ||
+                        deposit.getTargetCustomers().equals(joinObject))
+                .collect(Collectors.toList());
 
-            boolean containsSearchWord = searchWord != null && !searchWord.isEmpty() &&
-                    depositProductData.toLowerCase().contains(searchWord.toLowerCase());
-
-            boolean matchesBank = selectedBank == null || selectedBank.equals("all") || deposit.getBankName().equals(selectedBank);
-            boolean matchesJoinWay = selectedJoinWay == null || selectedJoinWay.equals("all") || deposit.getJoinMethod().equals(selectedJoinWay);
-            boolean matchesJoinObject = selectedJoinObject == null || selectedJoinObject.equals("all") || deposit.getTargetCustomers().equals(selectedJoinObject);
-
-
-            if ((searchWord == null || containsSearchWord) && matchesBank && matchesJoinWay && matchesJoinObject) {
-                filteredDeposits.add(deposit);
-            }
+        if ("기본금리순".equals(sortWay)) {
+            filteredDeposits.sort(Comparator.comparing(FixedDepositProduct::getMaximumPreferentialRate));
+        } else if ("최고금리순".equals(sortWay)) {
+            filteredDeposits.sort(Comparator.comparing(FixedDepositProduct::getMaximumPreferentialRate).reversed());
         }
 
-        List<FixedDepositProduct> sortedDeposits = new ArrayList<>();
-
-        if (selectedSortWay != null && !selectedSortWay.isEmpty()) {
-            if (selectedSortWay.equals("maximum")) {
-                sortedDeposits = filteredDeposits.stream()
-                        .sorted(Comparator.comparingDouble(FixedDepositProduct::getMaximumPreferentialRate).reversed())
-                        .collect(Collectors.toList());
-            } else if (selectedSortWay.equals("all")) {
-                sortedDeposits = filteredDeposits.stream()
-                        .sorted(Comparator.comparingDouble(FixedDepositProduct::getMaximumPreferentialRate))
-                        .collect(Collectors.toList());
-            }
-        } else {
-            sortedDeposits = filteredDeposits;
-        }
-
-        return sortedDeposits;
+        return filteredDeposits;
     }
 }
 

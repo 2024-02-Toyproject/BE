@@ -5,17 +5,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import smu.toyproject1.dto.DepositRequest;
+import smu.toyproject1.dto.DepositResponse;
 import smu.toyproject1.entity.*;
 import smu.toyproject1.repository.JdbcDBConnection;
 import smu.toyproject1.service.DepositService;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class ProductController {
 
     /*
@@ -28,22 +27,34 @@ public class ProductController {
     @Autowired
     private DepositService depositService;
 
-    // 정기예금 상품 목록 조회
+    // 정기예금 상품 목록 조회, REST API 구현
     @GetMapping("/fixedDeposit")
     public ResponseEntity<List<FixedDepositProduct>> getFixedDepositProducts() {
         List<FixedDepositProduct> fixedDeposits = depositService.getAllDeposits();
         return new ResponseEntity<>(fixedDeposits, HttpStatus.OK);
     }
 
-    // 정기예금 검색 & 필터링 반영하여 조회
+    // 필터링 반영하여 정기예금 목록 조회
     @PostMapping("/fixedDeposit")
-    public ResponseEntity<String> processRequest(@RequestBody YourRequestData requestData) {
-        // requestData를 이용하여 원하는 로직을 수행합니다.
-        String bank = requestData.getBank();
-        String joinWay = requestData.getJoinWay();
-        String joinObject = requestData.getJoinObject();
-        String sortWay = requestData.getSortWay();
+    public DepositResponse handleDepositRequest(@RequestBody DepositRequest request) {
+        System.out.println("request = " + request); // 요청이 제대로 오는지 확인하기 위한 출력 코드
+        List<FixedDepositProduct> depositProduct = depositService.getFilteredDeposits(request);
+        // depositProduct 리스트를 DepositResponse에 포함
+        System.out.println("depositProduct = " + depositProduct); // 응답이 제대로 가는지 확인하기 위한 출력 코드
+        return new DepositResponse(depositProduct);
     }
+}
+
+
+        // 정기예금 검색 & 필터링 반영하여 조회
+//    @PostMapping("/fixedDeposit")
+//    public ResponseEntity<String> processRequest(@RequestBody YourRequestData requestData) {
+//        // requestData를 이용하여 원하는 로직을 수행합니다.
+//        String bank = requestData.getBank();
+//        String joinWay = requestData.getJoinWay();
+//        String joinObject = requestData.getJoinObject();
+//        String sortWay = requestData.getSortWay();
+//    }
 //    public ResponseEntity<List<FixedDepositProduct>> searchAndFilterDeposits(
 //            @RequestParam(value = "searchWord", required = false) String searchWord,
 //            @RequestParam(value = "selectedBank", required = false) String selectedBank,
@@ -81,36 +92,35 @@ public class ProductController {
 //        return "redirect:/deposit";
 //    }
 
-    // 신용대출 상품 목록 조회
-    @GetMapping("/creditLoan")
-    public String getCreditLoanProducts(Model model) {
-        List<CreditLoanProduct> creditLoans = jdbcDBConnection.retrieveCLDataFromTable("신용대출");
-        model.addAttribute("creditLoans", creditLoans);
-        return "products/creditLoanProductsList";
-    }
+//    // 신용대출 상품 목록 조회
+//    @GetMapping("/creditLoan")
+//    public String getCreditLoanProducts(Model model) {
+//        List<CreditLoanProduct> creditLoans = jdbcDBConnection.retrieveCLDataFromTable("신용대출");
+//        model.addAttribute("creditLoans", creditLoans);
+//        return "products/creditLoanProductsList";
+//    }
+//
+//    // 적금 상품 목록 조회
+//    @GetMapping("/installmentSaving")
+//    public String getInstallmentSavingProducts(Model model) {
+//        List<InstallmentSavingProduct> installmentSavings = jdbcDBConnection.retrieveISDataFromTable("적금");
+//        model.addAttribute("installmentSavings", installmentSavings);
+//        return "products/installmentSavingProductsList";
+//    }
+//
+//    // 절세금융 상품 목록 조회
+//    @GetMapping("/taxSaving")
+//    public String getTaxSavingProducts(Model model) {
+//        List<TaxSavingProduct> taxSavings = jdbcDBConnection.retrieveTSDataFromTable("절세금융상품");
+//        model.addAttribute("taxSavings", taxSavings);
+//        return "products/taxSavingProductsList";
+//    }
+//    @GetMapping("/member/myPage")
+//    public String getFavorite(Model model) {
+//        List<Favorite> favorites = jdbcDBConnection.retrieveFavDataFromTable("user_interest");
+//        model.addAttribute("favorites", favorites);
+//        return "mypage";
+//    }
 
-    // 적금 상품 목록 조회
-    @GetMapping("/installmentSaving")
-    public String getInstallmentSavingProducts(Model model) {
-        List<InstallmentSavingProduct> installmentSavings = jdbcDBConnection.retrieveISDataFromTable("적금");
-        model.addAttribute("installmentSavings", installmentSavings);
-        return "products/installmentSavingProductsList";
-    }
-
-    // 절세금융 상품 목록 조회
-    @GetMapping("/taxSaving")
-    public String getTaxSavingProducts(Model model) {
-        List<TaxSavingProduct> taxSavings = jdbcDBConnection.retrieveTSDataFromTable("절세금융상품");
-        model.addAttribute("taxSavings", taxSavings);
-        return "products/taxSavingProductsList";
-    }
-    @GetMapping("/member/myPage")
-    public String getFavorite(Model model) {
-        List<Favorite> favorites = jdbcDBConnection.retrieveFavDataFromTable("user_interest");
-        model.addAttribute("favorites", favorites);
-        return "mypage";
-    }
-
-}
 
 
