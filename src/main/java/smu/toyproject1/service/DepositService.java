@@ -27,21 +27,17 @@ public class DepositService {
 
     // 검색어 및 필터링 옵션을 적용한 데이터 조회
     public List<FixedDepositProduct> getFilteredDeposits(DepositRequest request) {
-        // 클라이언트에서 요청한 옵션 정보 받아오는 객체
         String bank = request.getBank();
         String joinWay = request.getJoinWay();
         String joinObject = request.getJoinObject();
         String sortWay = request.getSortWay();
 
-        // 필터링된 데이터 담을 객체
-        List<FixedDepositProduct> filteredDeposits;
-        // 전체 데이터 객체
         List<FixedDepositProduct> allDeposits = depositRepository.findAll("정기예금");
 
-        filteredDeposits = allDeposits.stream()
-                .filter(deposit -> deposit.getBankName().equals(bank) ||
-                        deposit.getJoinMethod().equals(joinWay) ||
-                        deposit.getTargetCustomers().equals(joinObject))
+        List<FixedDepositProduct> filteredDeposits = allDeposits.stream()
+                .filter(deposit -> (bank == null || deposit.getBankName().contains(bank)) &&
+                        (joinWay == null || deposit.getJoinMethod().contains(joinWay)) &&
+                        (joinObject == null || deposit.getTargetCustomers().contains(joinObject)))
                 .collect(Collectors.toList());
 
         if ("기본금리순".equals(sortWay)) {
@@ -49,8 +45,8 @@ public class DepositService {
         } else if ("최고금리순".equals(sortWay)) {
             filteredDeposits.sort(Comparator.comparing(FixedDepositProduct::getMaximumPreferentialRate).reversed());
         }
-
         return filteredDeposits;
     }
+
 }
 

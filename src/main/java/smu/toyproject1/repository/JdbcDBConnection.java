@@ -26,8 +26,7 @@ public class JdbcDBConnection {
             // 데이터베이스 연결
             connection = DriverManager.getConnection(url, username, password);
 
-            // 연결 성공 시 추가 작업 수행
-
+            // 연결 성공 시 메시지
             System.out.println("데이터베이스 연결 성공!");
         } catch (ClassNotFoundException e) {
             System.out.println("JDBC 드라이버를 찾을 수 없습니다.");
