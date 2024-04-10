@@ -35,9 +35,9 @@ public class DepositService {
         List<FixedDepositProduct> allDeposits = depositRepository.findAll("정기예금");
 
         List<FixedDepositProduct> filteredDeposits = allDeposits.stream()
-                .filter(deposit -> (bank == null || deposit.getBankName().contains(bank)) &&
-                        (joinWay == null || deposit.getJoinMethod().contains(joinWay)) &&
-                        (joinObject == null || deposit.getTargetCustomers().contains(joinObject)))
+                .filter(deposit -> ("전체".equals(bank) || deposit.getBankName().contains(bank)) &&
+                        ("전체".equals(joinWay) || deposit.getJoinMethod().contains(joinWay)) &&
+                        ("전체".equals(joinObject) || deposit.getTargetCustomers().contains(joinObject)))
                 .collect(Collectors.toList());
 
         if ("기본금리순".equals(sortWay)) {
