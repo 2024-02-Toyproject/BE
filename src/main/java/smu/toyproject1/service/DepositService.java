@@ -7,10 +7,7 @@ import smu.toyproject1.dto.DepositRequest;
 import smu.toyproject1.entity.FixedDepositProduct;
 import smu.toyproject1.repository.DepositRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,21 +23,39 @@ public class DepositService {
         return depositRepository.findAll("정기예금");
     }
 
-    // 검색어와 필터링 옵션을 반영한 데이터 조회
+    //이전 요청 정보를 저장하기 위한 간단한 캐시 클래스
+    class RequestCache {
+        static String lastBank = null;
+        static String lastJoinWay = null;
+        static String lastJoinObject = null;
+        static String lastSearchWord = null;
+    }
+
+    /**
+     * 필터링 옵션 -> 검색어
+     *
+     */
     public List<FixedDepositProduct> getFilteredDeposits(DepositRequest request) {
-        String bank = request.getBank();
-        String joinWay = request.getJoinWay();
-        String joinObject = request.getJoinObject();
+        String bank = request.getBank() != null ? request.getBank() : RequestCache.lastBank;
+        String joinWay = request.getJoinWay() != null ? request.getJoinWay() : RequestCache.lastJoinWay;
+        String joinObject = request.getJoinObject() != null ? request.getJoinObject() : RequestCache.lastJoinObject;
         String sortWay = request.getSortWay();
-        Object searchWord = request.getSearchWord(); // 검색어 객체
+
+        // 검색어가 null이 아니면 새로운 검색어를 사용하고, null이면 이전 검색어를 사용
+        Object searchWord = request.getSearchWord() != null ? request.getSearchWord() : RequestCache.lastSearchWord;
 
         List<FixedDepositProduct> allDeposits = depositRepository.findAll("정기예금");
 
-        Stream<FixedDepositProduct> filteredStream = allDeposits.stream()
-                .filter(deposit -> (bank == null || "전체".equals(bank) || deposit.getBankName().contains(bank)) &&
-                        (joinWay == null || "전체".equals(joinWay) || deposit.getJoinMethod().contains(joinWay)) &&
-                        (joinObject == null || "전체".equals(joinObject) || deposit.getTargetCustomers().contains(joinObject)));
+        Stream<FixedDepositProduct> filteredStream = allDeposits.stream();
 
+        // 필터링 옵션 적용
+        filteredStream = filteredStream.filter(deposit -> (bank == null || "전체".equals(bank) || deposit.getBankName().contains(bank)) &&
+                (joinWay == null || "전체".equals(joinWay) || deposit.getJoinMethod().contains(joinWay)) &&
+                (joinObject == null || "전체".equals(joinObject) || deposit.getTargetCustomers().contains(joinObject)));
+
+
+        // 검색어가 변경된 경우에만 검색어 필터링 적용
+        // 검색어 필터링 적용
         if (searchWord != null && !searchWord.toString().isEmpty()) {
             filteredStream = filteredStream.filter(deposit ->
                     deposit.getBankName().toLowerCase().contains(searchWord.toString().toLowerCase()) || // 은행명
@@ -54,40 +69,24 @@ public class DepositService {
                             deposit.getInterestRateType().toLowerCase().contains(searchWord.toString().toLowerCase()) || // 저축금리유형명
                             Double.toString(deposit.getInterestRate()).contains(searchWord.toString().toLowerCase()) || // 저축금리
                             Double.toString(deposit.getMaximumPreferentialRate()).contains(searchWord.toString().toLowerCase())); // 최고우대금리
+
         }
+
+        // 캐시 업데이트
+        RequestCache.lastBank = bank;
+        RequestCache.lastJoinWay = joinWay;
+        RequestCache.lastJoinObject = joinObject;
+        RequestCache.lastSearchWord = searchWord != null ? searchWord.toString() : null;
 
         List<FixedDepositProduct> filteredDeposits = filteredStream.collect(Collectors.toList());
 
+        // 정렬 옵션 적용
         if ("기본금리순".equals(sortWay)) {
-            filteredDeposits.sort(Comparator.comparing(FixedDepositProduct::getMaximumPreferentialRate));
+            filteredDeposits.sort(Comparator.comparing(FixedDepositProduct::getInterestRate));
         } else if ("최고금리순".equals(sortWay)) {
-            filteredDeposits.sort(Comparator.comparing(FixedDepositProduct::getMaximumPreferentialRate).reversed());
+            filteredDeposits.sort(Comparator.comparing(FixedDepositProduct::getInterestRate).reversed());
         }
         return filteredDeposits;
     }
-
-    // 필터링 옵션을 적용한 데이터 조회 (검색어 반영 전)
-//    public List<FixedDepositProduct> getFilteredDeposits(DepositRequest request) {
-//        String bank = request.getBank();
-//        String joinWay = request.getJoinWay();
-//        String joinObject = request.getJoinObject();
-//        String sortWay = request.getSortWay();
-//
-//        List<FixedDepositProduct> allDeposits = depositRepository.findAll("정기예금");
-//
-//        List<FixedDepositProduct> filteredDeposits = allDeposits.stream()
-//                .filter(deposit -> ("전체".equals(bank) || deposit.getBankName().contains(bank)) &&
-//                        ("전체".equals(joinWay) || deposit.getJoinMethod().contains(joinWay)) &&
-//                        ("전체".equals(joinObject) || deposit.getTargetCustomers().contains(joinObject)))
-//                .collect(Collectors.toList());
-//
-//        if ("기본금리순".equals(sortWay)) {
-//            filteredDeposits.sort(Comparator.comparing(FixedDepositProduct::getMaximumPreferentialRate));
-//        } else if ("최고금리순".equals(sortWay)) {
-//            filteredDeposits.sort(Comparator.comparing(FixedDepositProduct::getMaximumPreferentialRate).reversed());
-//        }
-//        return filteredDeposits;
-//    }
-
 }
 
