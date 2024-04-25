@@ -1,6 +1,8 @@
 package smu.toyproject1.controller;
 
 import ch.qos.logback.core.model.Model;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import smu.toyproject1.dto.MemberDTO;
 import smu.toyproject1.service.MemberService;
 import jakarta.servlet.http.HttpSession;
@@ -9,12 +11,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
     // 생성자 주입
     private final MemberService memberService;
+    private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
     // 회원가입 페이지 출력 요청
     @GetMapping("/member/save")
@@ -23,11 +29,14 @@ public class MemberController {
     }
 
     @PostMapping("/member/save")
-    public String save(@ModelAttribute MemberDTO memberDTO){
+    public ResponseEntity<?> save(@RequestBody MemberDTO memberDTO){
         System.out.println("MemberController.save");
         System.out.println("memberDTO = " + memberDTO);
         memberService.save(memberDTO);
-        return "login";
+
+        // ResponseEntity를 사용하여 HTTP 응답을 보다 유연하게 설정할 수 있습니다.
+        // 예를 들어, 성공적으로 저장되었다는 메시지와 함께 HTTP 상태 코드 200(OK)을 반환할 수 있습니다.
+        return ResponseEntity.ok("Member information has been successfully saved.");
     }
     @GetMapping("/member/login")
     public String loginForm(){
