@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -29,7 +29,7 @@ public class MemberController {
     }
 
     @PostMapping("/member/save")
-    public ResponseEntity<?> save(@RequestBody MemberDTO memberDTO){
+    public ResponseEntity<?> save(@RequestBody MemberDTO memberDTO) {
         System.out.println("MemberController.save");
         System.out.println("memberDTO = " + memberDTO);
         memberService.save(memberDTO);
@@ -38,8 +38,9 @@ public class MemberController {
         // 예를 들어, 성공적으로 저장되었다는 메시지와 함께 HTTP 상태 코드 200(OK)을 반환할 수 있습니다.
         return ResponseEntity.ok("Member information has been successfully saved.");
     }
+
     @GetMapping("/member/login")
-    public String loginForm(){
+    public String loginForm() {
         return "login";
     }
 
@@ -57,11 +58,22 @@ public class MemberController {
             return "login";
         }
     }
+
     @GetMapping("/member/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         session.invalidate();
         return "index";
     }
 
+    @GetMapping("/member/myPage")
+    public String myPage(HttpSession session, Model model) {
+        // 세션에서 사용자 정보를 가져옵니다. 실제 구현에서는 로그인 상태 확인 등의 처리가 필요할 수 있습니다.
+        String loginName = (String) session.getAttribute("loginName");
+        if(loginName == null) {
+            // 로그인하지 않은 사용자의 경우 로그인 페이지로 리다이렉트 처리
+            return "redirect:/member/login";
+        }
 
+        return "mypage"; // mypage.html을 뷰로 사용
+    }
 }
