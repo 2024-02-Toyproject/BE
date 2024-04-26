@@ -1,6 +1,6 @@
 package smu.toyproject1.controller;
 
-import ch.qos.logback.core.model.Model;
+import org.springframework.ui.Model;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import smu.toyproject1.dto.MemberDTO;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.List;
 
 
 @Controller
@@ -52,6 +53,8 @@ public class MemberController {
             session.setAttribute("loginName", loginResult.getMemberName());
             session.setAttribute("gender", loginResult.getGender());
             session.setAttribute("age", loginResult.getAge());
+            session.setAttribute("fav_company", loginResult.getFavCompany());
+            session.setAttribute("fav_product", loginResult.getFavProduct());
             return "home";
         } else {
             // login 실패
@@ -73,6 +76,8 @@ public class MemberController {
             // 로그인하지 않은 사용자의 경우 로그인 페이지로 리다이렉트 처리
             return "redirect:/member/login";
         }
+        List<MemberDTO> memberDTOList = memberService.findAll();
+        model.addAttribute("memberList", memberDTOList);
 
         return "mypage"; // mypage.html을 뷰로 사용
     }

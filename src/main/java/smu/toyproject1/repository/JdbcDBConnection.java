@@ -259,6 +259,7 @@ public class JdbcDBConnection {
         return taxSavingProducts;
     }
 
+    // 관심상품 목록 db 불러오기
     public static List<Favorite> retrieveFavDataFromTable(String tableName) {
         Connection connection = null;
         PreparedStatement preparedStatement = null;

@@ -10,6 +10,7 @@ import smu.toyproject1.entity.MemberEntity;
 import smu.toyproject1.repository.FavRepository;
 import smu.toyproject1.repository.MemberRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,5 +34,6 @@ public class FavService {
         // 저장된 Entity를 다시 DTO로 변환하여 반환
         return FavDTO.toFavDTO(favEntity);
     }
+
 }
 
