@@ -12,9 +12,5 @@ public class DepositRequest {
     private String joinObject;
     private String sortWay;
     private Object searchWord; // (추가) 검색어, 데이터 타입 상관없이 넘겨받을 수 있음
-
-//    // 기본 생성자
-//    public DepositRequest() {
-//    }
 }
 
