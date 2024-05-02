@@ -26,6 +26,10 @@ public class MemberEntity {
     private String gender;
     @Column
     private String age;
+    @Column
+    private String favCompany;
+    @Column
+    private String favProduct;
 
     public static MemberEntity toMemberEntity(MemberDTO memberDTO){
         MemberEntity memberEntity = new MemberEntity();
@@ -34,6 +38,8 @@ public class MemberEntity {
         memberEntity.setMemberPassword(memberDTO.getMemberPassword());
         memberEntity.setGender(memberDTO.getGender());
         memberEntity.setAge(memberDTO.getAge());
+        memberEntity.setFavCompany(memberDTO.getFavCompany());
+        memberEntity.setFavProduct(memberDTO.getFavProduct());
         return memberEntity;
     }
 }

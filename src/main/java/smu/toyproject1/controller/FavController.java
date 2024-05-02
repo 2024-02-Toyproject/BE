@@ -15,7 +15,7 @@ public class FavController {
 
     @GetMapping("/fav/save")
     public String addFav() {
-        return "mypage"; // 관심상품 등록 폼으로 이동하는 뷰의 이름을 명확히 합니다.
+        return "mypage";
     }
 
     @PostMapping("/fav/save")
@@ -23,4 +23,5 @@ public class FavController {
         favService.save(favDTO);
         return "mypage"; // 성공적으로 저장 후 마이페이지로 리다이렉트합니다.
     }
+
 }

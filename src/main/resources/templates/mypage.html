@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>mypage</title>
+    <title>myPage</title>
 </head>
 <body>
 <div>
@@ -10,18 +10,20 @@
     <h2>마이페이지</h2>
     <p><span th:text="${session.loginName}"></span> 님, 반갑습니다.</p>
     <p><span th:text="${session.age}"></span>세 / <span th:text="${session.gender}"></span></p>
-
+</div>
+<div>
     <h3>관심 상품 목록</h3>
     <table>
         <tr>
             <th>회사명</th>
-            <th>상품 이름</th>
+            <th>상품이름</th>
         </tr>
-        <tr th:each="favorite : ${favorites}">
-            <td th:text="${favorite.company}"></td>
-            <td th:text="${favorite.productName}"></td>
+        <tr>
+            <td th:text="${session.fav_company}"></td>
+            <td th:text="${session.fav_product}"></td>
         </tr>
     </table>
+
 
 </div>
 </body>
