@@ -7,8 +7,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
-
 @Component
 public class JdbcDBConnection {
     public static Connection getConnection() {
@@ -48,61 +46,6 @@ public class JdbcDBConnection {
                 e.printStackTrace();
             }
         }
-    }
-
-    // 테이블에서 적금 상품의 데이터를 조회
-    public static List<InstallmentSavingProduct> retrieveISDataFromTable(String tableName) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        List<InstallmentSavingProduct> installmentSavings = new ArrayList<>();
-
-        try {
-            connection = getConnection();
-            if (connection != null) {
-                String sql = "SELECT * FROM " + tableName;
-                preparedStatement = connection.prepareStatement(sql);
-                resultSet = preparedStatement.executeQuery();
-
-                while (resultSet.next()) {
-                    String company = resultSet.getString("금융회사명");
-                    String productName = resultSet.getString("금융상품명");
-                    String applicationMethod = resultSet.getString("가입방법");
-                    String maturityInterestRate = resultSet.getString("만기후이자율");
-                    String preferentialConditions = resultSet.getString("우대조건");
-                    String eligibilityRestrictions = resultSet.getString("가입제한");
-                    String targetCustomers = resultSet.getString("가입대상");
-                    Long maximumLimit = resultSet.getLong("최고한도");
-                    String savingsInterestRateTypeName = resultSet.getString("저축금리유형명");
-                    Double savingsInterestRate = resultSet.getDouble("저축금리");
-                    Double maximumPreferentialRate = resultSet.getDouble("최고우대금리");
-
-                    InstallmentSavingProduct installmentSaving = new InstallmentSavingProduct(company, productName, applicationMethod, maturityInterestRate
-                            , preferentialConditions, eligibilityRestrictions, targetCustomers, maximumLimit, savingsInterestRateTypeName, savingsInterestRate, maximumPreferentialRate);
-                    installmentSavings.add(installmentSaving);
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("데이터 조회 오류입니다.");
-            e.printStackTrace();
-        } finally {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (preparedStatement != null) {
-                try {
-                    preparedStatement.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            closeConnection(connection);
-        }
-        return installmentSavings;
     }
 
     // 테이블에서 절세금융상품의 데이터를 조회
