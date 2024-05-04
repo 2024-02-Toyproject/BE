@@ -83,6 +83,16 @@ public class ProductController {
         List<TaxSavingProduct> fixedTaxSavings = taxSavingService.getAllTaxSavings();
         return new ResponseEntity<>(fixedTaxSavings, HttpStatus.OK);
     }
+
+    // 검색어 반영하여 적금 목록 조회
+    @PostMapping("/taxSaving")
+    public TaxSavingResponse handleSavingRequest(@RequestBody TaxSavingRequest request) {
+        System.out.println("request = " + request); // 요청이 제대로 오는지 확인하기 위한 출력 코드
+        List<TaxSavingProduct> taxSavingProduct = taxSavingService.getFilteredTaxSavings(request);
+        // TaxSavingProduct 리스트를 TaxSavingResponse에 포함
+        System.out.println("taxSavingProduct = " + taxSavingProduct); // 응답이 제대로 가는지 확인하기 위한 출력 코드
+        return new TaxSavingResponse(taxSavingProduct);
+    }
 }
 
 
