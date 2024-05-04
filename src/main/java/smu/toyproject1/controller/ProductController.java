@@ -10,6 +10,7 @@ import smu.toyproject1.repository.JdbcDBConnection;
 import smu.toyproject1.service.DepositService;
 import smu.toyproject1.service.LoanService;
 import smu.toyproject1.service.SavingService;
+import smu.toyproject1.service.TaxSavingService;
 
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class ProductController {
     private LoanService loanService;
     @Autowired
     private SavingService savingService;
+    @Autowired
+    private TaxSavingService taxSavingService;
 
     // 정기예금 상품 목록 조회, REST API 구현
     @GetMapping("/fixedDeposit")
@@ -73,13 +76,13 @@ public class ProductController {
         System.out.println("savingProduct = " + savingProduct); // 응답이 제대로 가는지 확인하기 위한 출력 코드
         return new SavingResponse(savingProduct);
     }
-//
-//    // 절세금융 상품 목록 조회, REST API 구현
-//    @GetMapping("/taxSaving")
-//    public ResponseEntity<List<FixedDepositProduct>> getFixedDepositProducts() {
-//        List<FixedDepositProduct> fixedDeposits = depositService.getAllDeposits();
-//        return new ResponseEntity<>(fixedDeposits, HttpStatus.OK);
-//    }
+
+    // 절세금융 상품 목록 조회, REST API 구현
+    @GetMapping("/taxSaving")
+    public ResponseEntity<List<TaxSavingProduct>> getFixedTaxSavingProducts() {
+        List<TaxSavingProduct> fixedTaxSavings = taxSavingService.getAllTaxSavings();
+        return new ResponseEntity<>(fixedTaxSavings, HttpStatus.OK);
+    }
 }
 
 
