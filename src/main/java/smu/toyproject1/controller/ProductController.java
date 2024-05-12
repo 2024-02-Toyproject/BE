@@ -68,7 +68,7 @@ public class ProductController {
     }
 
     // 필터링 반영하여 적금 목록 조회
-    @PostMapping("/creditLoan")
+    @PostMapping("/saving")
     public SavingResponse handleSavingRequest(@RequestBody SavingRequest request) {
         System.out.println("request = " + request); // 요청이 제대로 오는지 확인하기 위한 출력 코드
         List<SavingProduct> savingProduct = savingService.getFilteredSavings(request);
