@@ -2,27 +2,24 @@ package smu.toyproject1.controller;
 
 import org.springframework.ui.Model;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import smu.toyproject1.dto.MemberDTO;
 import smu.toyproject1.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
 
 
-@Controller
+@CrossOrigin(origins = "http://localhost:3000") // CORS 설정
+@RestController // JSON 데이터 반환을 위해 @RestController 사용
 @RequiredArgsConstructor
 public class MemberController {
     // 생성자 주입
     private final MemberService memberService;
     private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
-
     // 회원가입 페이지 출력 요청
     @GetMapping("/member/save")
     public String saveForm() {
@@ -46,7 +43,7 @@ public class MemberController {
     }
 
     @PostMapping("/member/login")
-    public String login(@ModelAttribute MemberDTO memberDTO, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO, HttpSession session) {
         MemberDTO loginResult = memberService.login(memberDTO);
         if (loginResult != null) {
             // login 성공
@@ -55,10 +52,10 @@ public class MemberController {
             session.setAttribute("age", loginResult.getAge());
             session.setAttribute("fav_company", loginResult.getFavCompany());
             session.setAttribute("fav_product", loginResult.getFavProduct());
-            return "home";
+            return ResponseEntity.ok(loginResult); // 로그인 성공 시 MemberDTO 객체 반환
         } else {
             // login 실패
-            return "login";
+            return ResponseEntity.badRequest().body("Login failed"); // 로그인 실패 시 에러 메시지 반환
         }
     }
 
