@@ -52,10 +52,27 @@ public class LoanService {
         filteredStream = filteredStream.filter(loan -> (bank == null || "전체".equals(bank) || loan.getCompany().contains(bank)) &&
                 (joinWay == null || "전체".equals(joinWay) || loan.getMethod().contains(joinWay)) &&
                 (loanType == null || "전체".equals(loanType) || loan.getLoanType().contains(loanType)));
+//        filteredStream = filteredStream.filter(loan ->
+//                (bank == null || "전체".equals(bank) || loan.getCompany().contains(bank)) &&
+//                        (joinWay == null || "전체".equals(joinWay) || loan.getMethod().contains(joinWay)) &&
+//                        (loanType == null || "전체".equals(loanType) || loan.getLoanType().contains(loanType)) &&
+//                        (loan.getRateType() == null || loan.getRateType().toLowerCase().contains(searchWord.toString().toLowerCase())));
+
 
 
         // 검색어가 변경된 경우에만 검색어 필터링 적용
         // 검색어 필터링 적용
+//        if (searchWord != null && !searchWord.toString().isEmpty()) {
+//            filteredStream = filteredStream.filter(loan ->
+//                    loan.getCompany().toLowerCase().contains(searchWord.toString().toLowerCase()) || // 은행명
+//                            loan.getProductName().toLowerCase().contains(searchWord.toString().toLowerCase()) || // 금융 상품명
+//                            loan.getMethod().toLowerCase().contains(searchWord.toString().toLowerCase()) || // 가입방법
+//                            loan.getLoanType().toLowerCase().contains(searchWord.toString().toLowerCase()) || // 대출종류명
+//                            loan.getCbCompany().toLowerCase().contains(searchWord.toString().toLowerCase()) || // CB 회사명
+//                            loan.getRateType().toLowerCase().contains(searchWord.toString().toLowerCase()) || // 금리구분
+//                            Double.toString(loan.getAverageRate()).contains(searchWord.toString().toLowerCase())); // 평균금리
+//        }
+
         if (searchWord != null && !searchWord.toString().isEmpty()) {
             filteredStream = filteredStream.filter(loan ->
                     loan.getCompany().toLowerCase().contains(searchWord.toString().toLowerCase()) || // 은행명
@@ -63,9 +80,10 @@ public class LoanService {
                             loan.getMethod().toLowerCase().contains(searchWord.toString().toLowerCase()) || // 가입방법
                             loan.getLoanType().toLowerCase().contains(searchWord.toString().toLowerCase()) || // 대출종류명
                             loan.getCbCompany().toLowerCase().contains(searchWord.toString().toLowerCase()) || // CB 회사명
-                            loan.getRateType().toLowerCase().contains(searchWord.toString().toLowerCase()) || // 금리구분
+                            (loan.getRateType() != null && loan.getRateType().toLowerCase().contains(searchWord.toString().toLowerCase())) || // 금리구분
                             Double.toString(loan.getAverageRate()).contains(searchWord.toString().toLowerCase())); // 평균금리
         }
+
 
         // 캐시 업데이트
         LoanService.RequestCache.lastBank = bank;
