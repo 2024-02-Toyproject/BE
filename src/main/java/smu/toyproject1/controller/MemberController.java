@@ -66,16 +66,22 @@ public class MemberController {
     }
 
     @GetMapping("/member/myPage")
-    public String myPage(HttpSession session, Model model) {
-        // 세션에서 사용자 정보를 가져옵니다. 실제 구현에서는 로그인 상태 확인 등의 처리가 필요할 수 있습니다.
+    public ResponseEntity<?> myPage(HttpSession session) {
+        // 세션에서 사용자 정보를 가져옵니다.
         String loginName = (String) session.getAttribute("loginName");
-        if(loginName == null) {
-            // 로그인하지 않은 사용자의 경우 로그인 페이지로 리다이렉트 처리
-            return "redirect:/member/login";
+        if (loginName == null) {
+            // 로그인하지 않은 사용자의 경우 에러 메시지 반환
+            return ResponseEntity.badRequest().body("You are not logged in");
         }
-        List<MemberDTO> memberDTOList = memberService.findAll();
-        model.addAttribute("memberList", memberDTOList);
 
-        return "mypage"; // mypage.html을 뷰로 사용
+        // 사용자 정보를 DTO 객체로 만들어서 반환
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setMemberName(loginName);
+        memberDTO.setAge((String) session.getAttribute("age"));
+        memberDTO.setGender((String) session.getAttribute("gender"));
+        memberDTO.setFavCompany((String) session.getAttribute("fav_company"));
+        memberDTO.setFavProduct((String) session.getAttribute("fav_product"));
+
+        return ResponseEntity.ok(memberDTO);
     }
 }
