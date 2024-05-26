@@ -34,7 +34,7 @@ public class LoanRepository {
                 resultSet = preparedStatement.executeQuery();
 
                 while (resultSet.next()) {
-                    String company = resultSet.getString("금융회사 명");
+                    String company = resultSet.getString("금융회사명");
                     String productName = resultSet.getString("금융 상품명");
                     String method = resultSet.getString("가입 방법");
                     String loanType = resultSet.getString("대출종류명");
