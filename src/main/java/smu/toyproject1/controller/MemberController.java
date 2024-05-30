@@ -50,8 +50,7 @@ public class MemberController {
             session.setAttribute("loginName", loginResult.getMemberName());
             session.setAttribute("gender", loginResult.getGender());
             session.setAttribute("age", loginResult.getAge());
-            session.setAttribute("fav_company", loginResult.getFavCompany());
-            session.setAttribute("fav_product", loginResult.getFavProduct());
+            session.setAttribute("loginEmail", loginResult.getMemberEmail());
             return ResponseEntity.ok(loginResult); // 로그인 성공 시 MemberDTO 객체 반환
         } else {
             // login 실패
@@ -69,6 +68,7 @@ public class MemberController {
     public ResponseEntity<?> myPage(HttpSession session) {
         // 세션에서 사용자 정보를 가져옵니다.
         String loginName = (String) session.getAttribute("loginName");
+        String loginEmail = (String) session.getAttribute("loginEmail");
         if (loginName == null) {
             // 로그인하지 않은 사용자의 경우 에러 메시지 반환
             return ResponseEntity.badRequest().body("You are not logged in");
@@ -77,10 +77,10 @@ public class MemberController {
         // 사용자 정보를 DTO 객체로 만들어서 반환
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setMemberName(loginName);
+        memberDTO.setMemberEmail(loginEmail);
         memberDTO.setAge((String) session.getAttribute("age"));
         memberDTO.setGender((String) session.getAttribute("gender"));
-        memberDTO.setFavCompany((String) session.getAttribute("fav_company"));
-        memberDTO.setFavProduct((String) session.getAttribute("fav_product"));
+
 
         return ResponseEntity.ok(memberDTO);
     }

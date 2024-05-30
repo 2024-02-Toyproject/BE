@@ -17,8 +17,6 @@ public class MemberDTO {
     private String memberPassword;
     private String gender;
     private String age;
-    private String favCompany;
-    private String favProduct;
 
     public static MemberDTO toMemberDTO(MemberEntity memberEntity) {
         MemberDTO memberDTO = new MemberDTO();
@@ -29,8 +27,6 @@ public class MemberDTO {
         memberDTO.setMemberPassword(memberEntity.getMemberPassword());
         memberDTO.setGender(memberEntity.getGender());
         memberDTO.setAge(memberEntity.getAge());
-        memberDTO.setFavCompany(memberEntity.getFavCompany());
-        memberDTO.setFavProduct(memberEntity.getFavProduct());
 
         return memberDTO;
     }
