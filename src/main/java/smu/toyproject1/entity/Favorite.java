@@ -27,7 +27,6 @@ public class Favorite {
     }
 
     public Favorite(String memberId, String bankName, String productName) {
-        // 아래 코드도 수정합니다. 올바르게 초기화하려면 매개변수 값을 필드에 할당해야 합니다.
         this.memberId = memberId;
         this.bankName = bankName;
         this.productName = productName;

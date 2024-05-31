@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import smu.toyproject1.entity.Favorite;
 import smu.toyproject1.repository.FavoriteRepository;
 
+import java.util.List;
+
 @Service
 public class FavoriteService {
     @Autowired
@@ -15,5 +17,7 @@ public class FavoriteService {
         favoriteRepository.save(favorite);
     }
 
-    // 필요한 경우 다른 메소드 추가
+    public List<Favorite> findByMemberId(String memberId) {
+        return favoriteRepository.findByMemberId(memberId);
+    }
 }
