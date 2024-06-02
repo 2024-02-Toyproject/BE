@@ -17,7 +17,7 @@ public class FavoriteController {
     private FavoriteService favoriteService;
 
     // 즐겨찾기 저장
-    @PostMapping("/depositLike")
+    @PostMapping("/favorites")
     public ResponseEntity<String> saveFavorite(@RequestBody FavoriteRequest request) {
         String memberId = request.getMemberId();
         String bankName = request.getBankName();
