@@ -23,6 +23,13 @@ public class FavoriteController {
         String bankName = request.getBankName();
         String productName = request.getProductName();
 
+        // 중복 체크 및 삭제 로직
+        boolean isDuplicate = favoriteService.checkDuplicate(memberId, bankName, productName);
+        if (isDuplicate) {
+            favoriteService.deleteFavorite(memberId, bankName, productName);
+            return ResponseEntity.status(HttpStatus.OK).body("Duplicate favorite deleted");
+        }
+
         favoriteService.saveFavorite(memberId, bankName, productName);
         return ResponseEntity.status(HttpStatus.CREATED).body("Favorite saved successfully");
     }

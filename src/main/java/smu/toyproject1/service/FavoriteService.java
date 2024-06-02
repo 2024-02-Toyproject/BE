@@ -6,6 +6,7 @@ import smu.toyproject1.entity.Favorite;
 import smu.toyproject1.repository.FavoriteRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FavoriteService {
@@ -19,5 +20,17 @@ public class FavoriteService {
 
     public List<Favorite> findByMemberId(String memberId) {
         return favoriteRepository.findByMemberId(memberId);
+    }
+
+    public boolean checkDuplicate(String memberId, String bankName, String productName) {
+        Optional<Favorite> existingFavorite = favoriteRepository.findByMemberIdAndBankNameAndProductName(memberId, bankName, productName);
+        return existingFavorite.isPresent();
+    }
+
+    public void deleteFavorite(String memberId, String bankName, String productName) {
+        Optional<Favorite> existingFavorite = favoriteRepository.findByMemberIdAndBankNameAndProductName(memberId, bankName, productName);
+        if (existingFavorite.isPresent()) {
+            favoriteRepository.delete(existingFavorite.get());
+        }
     }
 }
