@@ -8,7 +8,10 @@ import smu.toyproject1.dto.FavoriteRequest;
 import smu.toyproject1.entity.Favorite;
 import smu.toyproject1.service.FavoriteService;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -36,11 +39,15 @@ public class FavoriteController {
 
     // 특정 회원의 즐겨찾기 조회
     @GetMapping("/api/favorites/{memberId}")
-    public ResponseEntity<List<Favorite>> getFavoritesByMemberId(@PathVariable String memberId) {
+    public ResponseEntity<List<Map<String, Object>>> getFavoritesByMemberId(@PathVariable String memberId) {
         List<Favorite> favorites = favoriteService.findByMemberId(memberId);
-        if (favorites.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        List<Map<String, Object>> response = new ArrayList<>();
+        for (Favorite favorite : favorites) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("bankName", favorite.getBankName());
+            map.put("productName", favorite.getProductName());
+            response.add(map);
         }
-        return ResponseEntity.ok(favorites);
+        return ResponseEntity.ok(response);
     }
 }
